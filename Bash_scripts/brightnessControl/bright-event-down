@@ -1,0 +1,27 @@
+# Copyright (C) 2014-2018 Jamil Said Jr 
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## This file is part of the brightzz program. This program will attempt
+## to control the brightness of your screen. This program is customized
+## to every specific computer where it is installed, thus values below 
+## should be updated to specific cases. This program should be made bound to 
+## keybords key(s), as to allow user direct keyboard control (research 'keybinding')
+##
+## This program was created for and tested in Linux Debian 8.
+
+###This file normally should go in /etc/acpi/events
+
+event=video/brightnessdown BRTDN 00000087 00000000 K
+action=/usr/local/bin/brightzz4

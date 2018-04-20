@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# Copyright (C) 2017-2018 Jamil Said Jr
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## This file is part of the keybindsoundzz program. This program will attempt
+## to key bind some of your keyboad/computer keys/buttons to work with sound volume.
+## The program inserts the keybinding at an specific location of the openbox
+## keybinding master file for the user ('owner' in this case) and OS default.
+## If keybind of sound already exists, or if the keybind fails, the program 
+## will exit and inform that in a GUI pop-up
+##
+## This program was created for and tested in Linux Debian 8.
+
+#test first to see if entries are already there, and if yes, exit
+grepcheck1="$(grep -i "XF86AudioRaiseVolume" /etc/xdg/openbox/rc.xml)"; grepcheck2="$(grep -i "XF86AudioRaiseVolume" /home/owner/.config/openbox/lxde-rc.xml)"; if [[ -n "$grepcheck1" ]] || [[ -n "$grepcheck2" ]]; then bash -c 'nohup zenity --warning --text="Keybinding sound volume was already present, program exited without doing anything" &' && sleep 2 && exit; fi
+
+# sed (insert) code to bind regular xf86 sound commands to their regular 
+# keys on global conf file
+sed -i -e '/-- Keybindings for window switching --/a \
+\<keybind key="XF86AudioLowerVolume"\>\
+     \<action name="Execute"\>\
+       \<startupnotify\>\
+         \<enabled\>true\<\/enabled\>\
+         \<name\>amixer\<\/name\>\
+       \<\/startupnotify\>\
+       \<command\>amixer set Master 10\%\- unmute\<\/command\>\
+     \<\/action\>\
+   \<\/keybind\>\
+   \<keybind key="XF86AudioRaiseVolume"\>\
+     \<action name="Execute"\>\
+       \<startupnotify\>\
+         \<enabled\>true\<\/enabled\>\
+         \<name\>amixer\</name\>\
+       \<\/startupnotify\>\
+       \<command\>amixer set Master 10\%\+ unmute\<\/command\>\
+     \<\/action\>\
+   \<\/keybind\>\
+   \<keybind key="XF86AudioMute"\>\
+     \<action name="Execute"\>\
+       \<startupnotify\>\
+         \<enabled\>true\<\/enabled\>\
+         \<name\>amixer\<\/name\>\
+       \<\/startupnotify\>\
+       \<command\>amixer set Master toggle\<\/command\>\
+     \<\/action\>\
+   \<\/keybind\>' /etc/xdg/openbox/rc.xml
+         codigo="$?"; grepcheck1="$(grep -i "XF86AudioRaiseVolume" /etc/xdg/openbox/rc.xml)"; if [[ "$codigo" -ne 0 ]] || [[ -z "$grepcheck1" ]]; then bash -c 'nohup zenity --warning --text="Keybinding sound volume - global file - failed" &' && sleep 2 && exit; fi
+
+
+#sed (insert) code to bind regular xf86 sound commands to their regular 
+# keys on home/owner conf file   
+sed -i -e '/-- Keybindings for window switching --/a \
+\<keybind key="XF86AudioLowerVolume"\>\
+     \<action name="Execute"\>\
+       \<startupnotify\>\
+         \<enabled\>true\<\/enabled\>\
+         \<name\>amixer\<\/name\>\
+       \<\/startupnotify\>\
+       \<command\>amixer set Master 10\%\- unmute\<\/command\>\
+     \<\/action\>\
+   \<\/keybind\>\
+   \<keybind key="XF86AudioRaiseVolume"\>\
+     \<action name="Execute"\>\
+       \<startupnotify\>\
+         \<enabled\>true\<\/enabled\>\
+         \<name\>amixer\</name\>\
+       \<\/startupnotify\>\
+       \<command\>amixer set Master 10\%\+ unmute\<\/command\>\
+     \<\/action\>\
+   \<\/keybind\>\
+   \<keybind key="XF86AudioMute"\>\
+     \<action name="Execute"\>\
+       \<startupnotify\>\
+         \<enabled\>true\<\/enabled\>\
+         \<name\>amixer\<\/name\>\
+       \<\/startupnotify\>\
+       \<command\>amixer set Master toggle\<\/command\>\
+     \<\/action\>\
+   \<\/keybind\>' /home/owner/.config/openbox/lxde-rc.xml   
+         codigo="$?"; grepcheck1="$(grep -i "XF86AudioRaiseVolume" /home/owner/.config/openbox/lxde-rc.xml)"; if [[ "$codigo" -ne 0 ]] || [[ -z "$grepcheck1" ]]; then bash -c 'nohup zenity --warning --text="Keybinding sound volume - local home file - failed" &' && sleep 2 && exit; fi
+   
+exit 0
+

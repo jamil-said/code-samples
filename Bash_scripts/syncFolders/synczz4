@@ -1,0 +1,117 @@
+#!/bin/bash
+
+# Copyright (C) 2017-2018 Jamil Said Jr
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## This file is part of the synczz program. This program will attempt
+## to synchronize the content of two directories, making one directory the 
+## exact duplicate of the other (i.e.: both will have the same subdirectories 
+## and files). A GUI pop-up (zenity) will alert you in case of success 
+## and present the number of items synchronized. In case of any failure
+## a GUI pop-up will open alongside with a log page with the error. This 
+## program only runs for an specific user, in this case user "owner"
+## (that can be modified). Logs are created with date on the their names. 
+##
+## This program was created for and tested in Linux Debian 8 & 9.
+
+
+#declare some variables, make sure log directory exists
+mkdir -p /home/owner/Logs/synczz
+dirstore="/home/owner/Logs/synczz/"
+logdata="$(date +"%F")"
+exten="_synczz.log"
+lognome="$dirstore$logdata$exten"
+# This is the source directory
+linuxDirectory="/home/owner/directory/"
+# This is the target directory
+sharedDirectory="/media/Shared_Debian/directory/"
+# This is the only user allowed to use this program
+userOwner="owner"
+userSynczz="$(logname 2>/dev/null)"
+
+#declare error function
+errorSynczz () { 
+	echo "Syncing problem: $1" >> "$lognome"
+	nohup zenity --info --width=300 --height=150 --title="Error in Syncing \
+	Folders" --text="\nThere was a syncing problem: \n\n \"$1\" " & >> \
+	"$lognome" 2>&1
+	nohup pcmanfm /home/owner/Logs/synczz & >> "$lognome" 2>&1
+	sleep 1
+	exit
+} 
+
+#declare success function
+successSynczz () { 
+	echo "Syncing Succeeded. Number of files on each folder: \"$1\"" >> \
+	"$lognome"
+	nohup zenity --info --width=300 --height=150 --title="Syncing Folders \
+	Succeeded" --text="\nSyncing \"Code Linux\" Folders Succeeded! \n\n \
+	Number of files on each folder: \"$1\""	& >> "$lognome" 2>&1
+	sleep 1
+	exit
+} 
+
+#check that user running script is permited to do so, otherwise exit
+if [ "$userSynczz" != "$userOwner" ]; then
+	userSynczz="$(who 2>/dev/null | awk 'NR==1 {print $1}')"
+	if [ "$userSynczz" != "$userOwner" ]; then
+		userSynczzError="n\Aborted! \n\nThis script is meant to be run by \"owner\" \
+		user, not user: $userSynczz"
+		errorSynczz "$userSynczzError"
+	fi
+fi
+
+#check that both sync folders exist, otherwise exit
+if [ ! -d "$linuxDirectory" ] || [ ! -d "$sharedDirectory" ]; then
+	errorFolder="Folder(s) missing, could not be detected by the program"
+	errorSynczz "$errorFolder"
+fi
+
+#Execute the folder syncing
+## r = recursive, c = skip based on checksum (slower), t = preserve mod times
+## v = verbose, L = copy symlinks target file/folder on destination, 
+## p = preserve permissions, g = preserve groups, o = preserve owner
+### Note: using L option to copy the target of a symlink to destination folder
+### not doing so can create problems when copying to different partition (ex: VM)
+### see Symbolic Links part of the rsync manual for info
+rsync -rtvLpgo --specials --delete "$linuxDirectory" "$sharedDirectory" >> \
+"$lognome" 2>&1
+codigo="$?"
+if [ "$codigo" -ne 0 ]; then
+	errorDirSync="Error on rsyncing directories, error code $codigo"
+	errorSynczz "$errorDirSync"
+fi	
+
+#declare variables for comparing folders 
+testEqualFolders="$(diff -rq "$linuxDirectory" "$sharedDirectory")"
+testEqualFoldersNum="$(find "$sharedDirectory" | wc -l)"
+testEqualFoldersNum2="$(find "$linuxDirectory" | wc -l)"
+
+#additional double test to ensure sync succeeded
+if [ ! -z "$testEqualFolders" ]; then
+	errorCompFolders="Error on diff comparing directories, error code: \
+	\n\n $testEqualFolders"
+	errorSynczz "$errorCompFolders"
+elif [ "$testEqualFoldersNum" -ne "$testEqualFoldersNum2" ]; then
+	errorCompFolders2="Error on total file number comparison, folder count \
+	shared: $testEqualFoldersNum linux: $testEqualFoldersNum2"
+	errorSynczz "$errorCompFolders2"
+else
+	successSynczz "$testEqualFoldersNum2"
+fi
+
+exit
+
+
