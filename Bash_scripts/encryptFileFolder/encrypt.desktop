@@ -1,0 +1,41 @@
+[Desktop Entry]
+
+# Copyright (C) 2014-2018 Jamil Said Jr
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## This file is part of the encryptzz program. This program will attempt
+## to encrypt files or folders using the program p7zip capabilities (AES 256). 
+## Generally this program appears as an option in the right-click menu 
+## when clicking on a file or folder. The password is entered in a terminal
+## window that appears and is not echoed. Program checks for name collisions
+## and asks about overwriting on a GUI pop-up. In the end both the encrypted
+## as well the original file are kept on the folder
+##
+## This program was created for and tested in Linux Debian 8.
+
+### This file normally should be put on /usr/local/share/file-manager/actions to 
+### appear in the context menu (right-click menu)
+
+Type=Action
+Name=Encrypt File or Folder
+Tooltip=Encrypt File or Folder
+Icon=applications-system
+Profiles=profile-encrypt;
+
+[X-Action-Profile profile-encrypt]
+MimeTypes=all/all;
+Exec=/usr/local/bin/encryptzz4 %f
+Name=Default profile
+SelectionCount==1

@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2018 Jamil Said Jr
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## This file is part of the shredzz program. This program will attempt
+## to securely delete files and folders (with overwritting, so that they 
+## can't be "undeleted"), using the capabilities of the program secure-delete. 
+## This program uses a two pass overwrite (for speed purposes), but that can 
+## be modified to as little as one pass and as many as the Gutmann's method
+## recommends (way above old DoD guidelines). This program was made to appear
+## as an option in the right-click menu when clicking on a file or folder.
+## A GUI pop-up instructs the user about options and files/folders that can't 
+## be deleted (system files), and it won't work if user doesn't have the right 
+## permissions to delete the file/folder.
+##
+## This program was created for and tested in Linux Debian 8.
+
+filefolder="$1"
+homefolder="$HOME"
+deski="/Desktop"
+desktopi="$homefolder$deski"
+trunctrash="${filefolder:0:7}"
+trashi="trash:/"
+zenity --question --width=300 --height=200 --title="File and Folder Shredder" --text="\nATTENTION: this program will delete  $filefolder  beyond recovery. \nPlease note that the selected file\/folder WILL NOT be placed on the \"Trash Bin\", instead it will be deleted forever. \n\nPlease note that this program will overwrite files\/folders and it is quite time consuming, taking several minutes \nor even an hour or more in case of very large folders. \n\nTo delete a file or folder to the \"Trash Bin\", choose the option \"Move to Trash\" from the menu instead. \n\nTo CANCEL the deletion\/shredding, press the button \"Cancel\"\; Otherwise, press \"Delete Beyond Recovery\" to continue. \n" --ok-label="Delete Beyond Recovery" --cancel-label="Cancel"
+rc="$?"
+if [[ "$rc" -eq 1 ]] ; then
+    # user clicked Cancel
+    exit 0
+elif [[ "$homefolder" == "$filefolder" ]] ; then
+    nohup zenity --info --width=300 --height=150 --title="This Folder Cannot be Shredded" --text="\nThe \"Home\" folder  $homefolder  is required for your system to work properly, and should not be deleted\/shredded. \n\nPlease move the files\/folders you want to shred to a new folder, and shred that folder instead." & 
+    sleep 3
+	exit 0
+elif [[ "$desktopi" == "$filefolder" ]] ; then
+    nohup zenity --info --width=300 --height=150 --title="This Folder Cannot be Shredded" --text="\nThe \"Desktop\" folder  $desktopi  is required for your system to work properly, and should not be deleted\/shredded. \n\nPlease move the files\/folders you want to shred to a new folder, and shred that folder instead." & 
+    sleep 3
+    exit 0
+elif [[ "$trunctrash" == "$trashi" ]] ; then
+    nohup zenity --info --width=300 --height=150 --title="This Folder Cannot be Shredded" --text="\nThe \"Trash\" folder \(or any file\/folder inside it\) cannot be shredded, as the \"Trash\" folder is protected by the OS. \n\nPlease move the files\/folders you want to shred to a new folder, and shred that folder instead." & 
+    sleep 3
+    exit 0
+else
+    nohup /usr/local/bin/shredzz3 &
+    srm -rl "$filefolder"
+    sleep 1
+    killall shredzz3
+    wmctrl -c "Deletion Beyond Recovery Started"
+    sleep 3
+    exit 0
+fi

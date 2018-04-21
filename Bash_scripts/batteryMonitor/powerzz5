@@ -1,0 +1,108 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2018 Jamil Said Jr
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## This file is part of the powerzz program. This program will attempt
+## to monitor battery levels and hibernate/shutdown the computer when the battery
+## is close to be drained. This program relies on use of cron for scheduling battery
+## checks. When battery reaches a low level (15%), a GUI pop-up will warn user
+## about it. When battery reaches a critical level (7%) another GUI pop-up
+## will appear and give the user the option of hibernating or doing nothing;
+## if user doesn't choose in 30 seconds, the computer hibernates automatically.
+## Battery levels are checked three times every minute. If user dismisses
+## the critical battery warning, then there will be no more warnings until
+## after a reboot or after the computer was (temporarily or not) recharged again.
+## Users are able to choose from a GUI interface whether to turn on or off
+## the battery monitor altogether, and whether the action should be  
+## hibernate (default) or shutdown. 
+##
+## This program was created for and tested in Linux Debian 8.
+
+#find user who logged in
+rootendas="root"
+userpowerzz="$(who 2>/dev/null | awk 'NR==1 {print $1}')"
+if [[ -z "$userpowerzz" ]] || [[ "$userpowerzz" == "$rootendas" ]]; then
+  userpowerzz="$(w -h 2>/dev/null | awk 'NR==1 {print $1}')"
+  #if tests to find user all fail, then the battery monitor preferences 
+  #of user account that shipped with computer will be observed.
+  if [[ -z "$userpowerzz" ]] || [[ "$userpowerzz" == "$rootendas" ]]; then userpowerzz="owner"; fi   
+fi  
+
+#find path to home 
+hometesttil="~"
+hometesttilplus="$hometesttil$userpowerzz"
+homeecho="$(bash -c "echo $hometesttilplus")"
+homegrep="$(grep -i "$userpowerzz" /etc/passwd | cut -d ":" -f6)"
+hometestend="/.config"
+hometest1="$homegrep$hometestend"
+hometest2="$homeecho$hometestend"
+if [[ -d "$hometest1" ]]; then
+  homepowerzz="$homegrep"
+elif [[ -d "$hometest2" ]]; then
+  homepowerzz="$homeecho"
+else
+  # if tests to find home all fail, then the battery monitor preferences 
+  # of user account that shipped with computer will be observed.
+  homepowerzz="/home/owner"  
+fi
+
+# Check for non-temporary "monitor off" control file, to see if needs to 
+# exit program
+fileendoff="/.bat-monitor-chose-off.txt"
+controlfileoff="$homepowerzz$fileendoff"
+if [[ -e "$controlfileoff" ]]; then exit 0 ; fi
+
+#check the battery monitor's current status
+fileendshut="/.bat-monitor-chose-shutdown.txt"
+controlfileshut="$homepowerzz$fileendshut"
+controlfilenohiber="/usr/local/.extra-copies/no-hibernation.txt"
+if [[ -e "$controlfilenohiber" ]] || [[ -e "$controlfileshut" ]]; then
+  currentstatus="SHUTDOWN"
+  currentstatus2="Shutdown"
+else 
+  currentstatus="HIBERNATE"
+  currentstatus2="Hibernate"
+fi
+
+#keep zenity message always on top
+(while true; do wmctrl -a "Battery Charge is Very Low - Action Will Start in 30 Seconds"; sleep 1; done) > /dev/null 2>&1 &
+
+#zenity message - chance to cancel hibernation, timeout 30s
+zenity --question --width=300 --height=150 --title="Battery Charge is Very Low - Action Will Start in 30 Seconds" --timeout=30 --text="\nPLEASE NOTE: THE COMPUTER'S BATTERY IS ALMOST FULLY DISCHARGED. \n\nYour computer will $currentstatus in 30 seconds unless you press \"Cancel\" \n" --ok-label=" $currentstatus2 Now" --cancel-label=" Cancel, I will shutdown or recharge on my own"
+rc="$?"
+if [[ "$rc" -eq 1 ]]; then
+  #user clicked Cancel rc=1
+  echo "disabled" > /tmp/powerzz-total-exit-1 2> /dev/null
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then rm -f /tmp/powerzz-running-hiber-1 > /dev/null 2>&1; fi
+  exit 0	
+else
+  killall powerzz6 > /dev/null 2>&1
+  killall zenity > /dev/null 2>&1
+  #if computer is going to be hibernated, then temporary control files 
+  #should be deleted
+  if [[ -e /tmp/powerzz-total-exit-1 ]]; then rm -f /tmp/powerzz-total-exit-1 > /dev/null 2>&1; fi  
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then rm -f /tmp/powerzz-running-hiber-1 > /dev/null 2>&1; fi
+  if [[ -e /tmp/powerzz-warning-shown-1 ]]; then rm -f /tmp/powerzz-warning-shown-1 > /dev/null 2>&1; fi
+  if [[ -e "$controlfilenohiber" ]] || [[ -e "$controlfileshut" ]]; then 
+    systemctl poweroff > /dev/null 2>&1
+	exit 0
+  else	
+    systemctl hibernate > /dev/null 2>&1
+    exit 0
+  fi	
+fi
+
+exit 0

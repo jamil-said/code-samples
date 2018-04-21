@@ -1,0 +1,123 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2018 Jamil Said Jr
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## This file is part of the powerzz program. This program will attempt
+## to monitor battery levels and hibernate/shutdown the computer when the battery
+## is close to be drained. This program relies on use of cron for scheduling battery
+## checks. When battery reaches a low level (15%), a GUI pop-up will warn user
+## about it. When battery reaches a critical level (7%) another GUI pop-up
+## will appear and give the user the option of hibernating or doing nothing;
+## if user doesn't choose in 30 seconds, the computer hibernates automatically.
+## Battery levels are checked three times every minute. If user dismisses
+## the critical battery warning, then there will be no more warnings until
+## after a reboot or after the computer was (temporarily or not) recharged again.
+## Users are able to choose from a GUI interface whether to turn on or off
+## the battery monitor altogether, and whether the action should be  
+## hibernate (default) or shutdown. 
+##
+## This program was created for and tested in Linux Debian 8.
+
+#the following comments are repeated on powerzz4 and powerzz7 (if updating, please update both):
+#there are 3 temporary control files for powerzz: /tmp/powerzz-total-exit-1 , /tmp/powerzz-running-hiber-1 , /tmp/powerzz-warning-shown-1
+#there are 3 non-temporary controls (3 files) for powerzz: /usr/local/.extra-copies/no-hibernation.txt , ~/.bat-monitor-chose-shutdown.txt and ~/.bat-monitor-chose-off.txt
+
+#find user who logged in
+rootendas="root"
+userpowerzz="$(who 2>/dev/null | awk 'NR==1 {print $1}')"
+if [[ -z "$userpowerzz" ]] || [[ "$userpowerzz" == "$rootendas" ]]; then
+  userpowerzz="$(w -h 2>/dev/null | awk 'NR==1 {print $1}')"
+  #if tests to find user all fail, then the battery monitor preferences 
+  #of user account that shipped with computer will be observed.
+  if [[ -z "$userpowerzz" ]] || [[ "$userpowerzz" == "$rootendas" ]]; then userpowerzz="owner"; fi   
+fi  
+
+#find path to home 
+hometesttil="~"
+hometesttilplus="$hometesttil$userpowerzz"
+homeecho="$(bash -c "echo $hometesttilplus")"
+homegrep="$(grep -i "$userpowerzz" /etc/passwd | cut -d ":" -f6)"
+hometestend="/.config"
+hometest1="$homegrep$hometestend"
+hometest2="$homeecho$hometestend"
+if [[ -d "$hometest1" ]]; then
+  homepowerzz="$homegrep"
+elif [[ -d "$hometest2" ]]; then
+  homepowerzz="$homeecho"
+else
+  #if tests to find home all fail, then the battery monitor preferences 
+  #of user account that shipped with computer will be observed.
+  homepowerzz="/home/owner"  
+fi
+
+#check the battery monitor's current status
+fileendoff="/.bat-monitor-chose-off.txt"
+controlfileoff="$homepowerzz$fileendoff"
+fileendshut="/.bat-monitor-chose-shutdown.txt"
+controlfileshut="$homepowerzz$fileendshut"
+controlfilenohiber="/usr/local/.extra-copies/no-hibernation.txt"
+if [[ -e "$controlfileoff" ]]; then 
+  currentstatus="Monitor off"
+  elif [[ -e "$controlfilenohiber" ]] || [[ -e "$controlfileshut" ]]; then
+  currentstatus="Monitor on. Critical action: shutdown"
+  else 
+  currentstatus="Monitor on. Critical action: hibernate"
+fi
+  
+#zenity battery monitor manager - choose preferences
+userchoice1="$(zenity --list --width=370 --height=277 --title="Battery Monitor Preferences" --text "The battery monitor, if enabled, constantly checks the battery charge levels. If the \nbattery is not being charged, and its charge is 15% or lower, the monitor will warn \nyou but take no action. If the charge drops to 7% or lower, the monitor will warn \nyou again and start the critical action in 30 seconds (unless canceled). \n\nThe current status of the monitor is:  \"$currentstatus\" \n\nChoose your preference for the battery monitor: " --radiolist --column "Pick" --column "Preference" FALSE "Monitor on. Critical action: hibernate" FALSE "Monitor on. Critical action: shutdown" FALSE "Monitor off")"
+
+#based on the interaction of the user, change (or not) settings
+preference1="Monitor on. Critical action: hibernate"
+preference2="Monitor on. Critical action: shutdown"
+preference3="Monitor off"
+if [[ "$userchoice1" == "$preference1" ]]; then
+  #reset temporary files if battery monitor preferences were picked by user
+  if [[ -e /tmp/powerzz-total-exit-1 ]]; then rm -f /tmp/powerzz-total-exit-1 > /dev/null 2>&1; fi  
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then rm -f /tmp/powerzz-running-hiber-1 > /dev/null 2>&1; fi
+  if [[ -e /tmp/powerzz-warning-shown-1 ]]; then rm -f /tmp/powerzz-warning-shown-1 > /dev/null 2>&1; fi
+  if [[ -e "$controlfileshut" ]]; then rm -f "$controlfileshut" > /dev/null 2>&1; fi
+  if [[ -e "$controlfileoff" ]]; then rm -f "$controlfileoff" > /dev/null 2>&1; fi
+elif [[ "$userchoice1" == "$preference2" ]]; then
+  #reset temporary files if battery monitor preferences were picked by user
+  if [[ -e /tmp/powerzz-total-exit-1 ]]; then rm -f /tmp/powerzz-total-exit-1 > /dev/null 2>&1; fi  
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then rm -f /tmp/powerzz-running-hiber-1 > /dev/null 2>&1; fi
+  if [[ -e /tmp/powerzz-warning-shown-1 ]]; then rm -f /tmp/powerzz-warning-shown-1 > /dev/null 2>&1; fi
+  if [[ -e "$controlfileoff" ]]; then rm -f "$controlfileoff" > /dev/null 2>&1; fi
+  su - "$userpowerzz" -c "echo 'shutdown-chosen-via-monitor-preferences' > \"$controlfileshut\"" > /dev/null 2>&1
+elif [[ "$userchoice1" == "$preference3" ]]; then
+  #reset temporary files if battery monitor preferences were picked by user
+  if [[ -e /tmp/powerzz-total-exit-1 ]]; then rm -f /tmp/powerzz-total-exit-1 > /dev/null 2>&1; fi  
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then rm -f /tmp/powerzz-running-hiber-1 > /dev/null 2>&1; fi
+  if [[ -e /tmp/powerzz-warning-shown-1 ]]; then rm -f /tmp/powerzz-warning-shown-1 > /dev/null 2>&1; fi
+  if [[ -e "$controlfileshut" ]]; then rm -f "$controlfileshut" > /dev/null 2>&1; fi
+  su - "$userpowerzz" -c "echo 'monitor-off-chosen-via-monitor-preferences' > \"$controlfileoff\"" > /dev/null 2>&1
+else
+  exit 0
+fi
+
+#zenity warning for hibernation preference when computer does not support hibernation
+if [[ "$userchoice1" == "$preference1" ]] && [[ -e "$controlfilenohiber" ]]; then
+  nohup zenity --info --width=300 --height=150 --title="Problem Detected and Solved with Monitor Changes" --text="\nThe battery monitor detected that your computer does not support hibernation. \n\nTherefore, the critical action was changed from \"hibernate\" to \"shutdown\". \n\nThe current status of the monitor is: \"Monitor on. Critical action: shutdown\" " &
+  sleep 3
+  exit 0
+fi
+
+#zenity message saying that changes completed and are available immediatly
+nohup zenity --info --width=300 --height=150 --title="Change Completed" --text="\nThe change was applied successfully, and is effective immediatly.  \n\nThe current status of the monitor is: \"$userchoice1\"  " &
+sleep 3
+
+exit 0

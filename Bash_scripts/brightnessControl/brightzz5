@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2018 Jamil Said Jr 
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## This file is part of the brightzz program. This program will attempt
+## to control the brightness of your screen. This program is customized
+## to every specific computer where it is installed, thus values below 
+## should be updated to specific cases. This program should be made bound to 
+## keybords key(s), as to allow user direct keyboard control (research 'keybinding')
+##
+## This program was created for and tested in Linux Debian 8.
+
+#help prevent a race condition in case user clicks quickly several times
+sleep 0.1
+
+#make sure that we have a brightness interger number to work with
+getbrightraw="$(cat /sys/class/backlight/acpi_video0/brightness)"
+getbrightnum="$(echo "$getbrightraw" | sed 's/[^0-9]*//g')"
+if [[ -z "$getbrightnum" ]]; then getbrightnum="24"; fi
+
+#manipulate the brightness value to achieve the result wanted. In this specific case, the screen varies from 4 to 24 in increments of 4
+if [[ "$getbrightnum" -le 7 ]]; then getbrightnum="8"; echo "$getbrightnum" > /sys/class/backlight/acpi_video0/brightness 2>/dev/null; exit; fi
+if [[ "$getbrightnum" -le 11 ]]; then getbrightnum="12"; echo "$getbrightnum" > /sys/class/backlight/acpi_video0/brightness 2>/dev/null; exit; fi
+if [[ "$getbrightnum" -le 15 ]]; then getbrightnum="16"; echo "$getbrightnum" > /sys/class/backlight/acpi_video0/brightness 2>/dev/null; exit; fi
+if [[ "$getbrightnum" -le 19 ]]; then getbrightnum="20"; echo "$getbrightnum" > /sys/class/backlight/acpi_video0/brightness 2>/dev/null; exit; fi
+if [[ "$getbrightnum" -le 23 ]]; then getbrightnum="24"; echo "$getbrightnum" > /sys/class/backlight/acpi_video0/brightness 2>/dev/null; exit; fi
+if [[ "$getbrightnum" -ge 24 ]]; then getbrightnum="24"; echo "$getbrightnum" > /sys/class/backlight/acpi_video0/brightness 2>/dev/null; exit; fi
+
+exit 0
