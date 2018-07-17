@@ -13,6 +13,17 @@ class Solution:
         :type s: str
         :rtype: bool
         """
+        stack, setOp, dicCl = [], {'(','{','['}, {')':'(', '}':'{', ']':'['}
+        for c in s:
+            if c in setOp: 
+                stack.append(c)
+            elif c in dicCl: 
+                if len(stack) == 0 or stack.pop() != dicCl[c]: return False
+        return len(stack) == 0
+
+""" alternative, longer & slower
+class Solution:
+    def isValid(self, s):
         temp, opn, clos = ['0'], 0, 0
         for c in s:
             if c == '(' or c == '{' or c == '[': 
@@ -31,9 +42,9 @@ class Solution:
                 temp.pop()
                 clos += 1
         return opn == clos
-
-print(Solution.isValid(Solution, "[")) # False
-print(Solution.isValid(Solution, "([])")) # True
+"""
+print(Solution().isValid("()[]{}")) # True
+print(Solution().isValid("([)]")) # False
 
 
 

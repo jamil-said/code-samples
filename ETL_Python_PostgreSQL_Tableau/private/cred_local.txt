@@ -1,0 +1,5 @@
+db_etl
+postgres
+cG9zdGdyZXM=
+127.0.0.1
+5432
