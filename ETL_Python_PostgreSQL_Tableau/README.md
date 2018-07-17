@@ -1,10 +1,6 @@
-# Project Title
+# ETL (Extract Transform and Load) Using Python and PostgreSQL for Tableau
 
-ETL (Extract Transform and Load) Using Python and PostgreSQL for Tableau
-
-## Case Study
-
-### US Flights Case Study
+## Case Study: US Flights
 
 ### Scenario:
 You were provided with a flat file containing data about domestic flights in the United States. You are asked to have the data loaded into a PostgreSQL database and appropriately modeled in a star schema for use in Tableau.
@@ -34,5 +30,5 @@ The data is provided in a txt flat file (UTF-8 encoded), which is delimited by t
 ## About the Scripts
 The module **flights_etl.py** starts the process and will extract, check, fix (when possible), transform and load data from the txt file into the PostgreSQL database (the database part is done by imported module **flights_db**). The script will save a log with missing entries on **missing_data.tx**, and a log with obviously erroneous entries (not fixed by the script) on **bad_data.txt**, both logs created on the same directory where the script is run from. The logs can be used later to refine the script.
 
-### Scripts Author
+### Python Scripts Author
 Jamil Said Jr. -- Copyright (C) 2018 Jamil Said Jr
