@@ -9,9 +9,7 @@ you need to delete the first character of both words. Of course, the deletion
 distance between two strings can't be greater than the sum of their total
 ASCII values, because you can always delete both of the strings entirely. 
 Implement an efficient function to find the deletion distance between two 
-strings. You can refer to the Wikipedia article on the algorithm for edit 
-distance if you want to. The algorithm there is not quite the same as the 
-algorithm required here, but it's similar.
+strings. 
 """
 
 def delDis(s1, s2):

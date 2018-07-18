@@ -21,7 +21,7 @@ def brackets(myString):
             else: wnbc += 1
     return tbc + wnbc
 
-""" Alternative
+""" Alternative, slower
 def brackets(myString):
     tbc, wnbc = 0, 0  #to be closed, will not be closed
     for i in range(len(myString)):
