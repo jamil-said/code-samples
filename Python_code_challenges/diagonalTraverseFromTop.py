@@ -18,7 +18,9 @@ Your code should print out:
 """
 
 def printMtx(mtx):
-    if not mtx or not mtx[0]: return []
+    if not mtx or not mtx[0]: 
+        print('')
+        return
     startD = []
     for i in range(len(mtx[0])):
         startD.append([0, i])
