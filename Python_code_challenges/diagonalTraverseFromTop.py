@@ -8,7 +8,7 @@ to lower right) of the matrix. In this example where M = 3, N = 4:
 [5 5 6]
 [1 2 8]]
 
-Your code should print out
+Your code should print out:
 9
 3 8
 2 6 5
