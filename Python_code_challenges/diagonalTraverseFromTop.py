@@ -18,27 +18,19 @@ Your code should print out:
 """
 
 def printMtx(mtx):
-    if not mtx or not mtx[0]: 
-        print('')
-        return
-    startD = []
+    if not mtx or not mtx[0]: return ''
     for i in range(len(mtx[0])):
-        startD.append([0, i])
+        printDia(mtx, 0, i)
     for i in range(1, len(mtx)):
-        startD.append([i, len(mtx[0])-1])
-    printDia(mtx, startD)
+        printDia(mtx, i, len(mtx[0])-1)
         
-def printDia(mtx, startD):
-    tmpStr = ''
-    for a in startD:
-        row, col = a[0], a[1]
-        tmpStr += str(mtx[row][col]) + ' '
-        while row < len(mtx)-1 and col > 0:
-            row += 1
-            col -= 1
-            tmpStr += str(mtx[row][col]) + ' '
-        print(tmpStr)
-        tmpStr = ''
+def printDia(mtx, dx, dy):
+    tmpStr = str(mtx[dx][dy]) + ' '
+    while dx < len(mtx)-1 and dy > 0:
+        dx += 1
+        dy -= 1
+        tmpStr += str(mtx[dx][dy]) + ' '
+    print(tmpStr)
     
 print(printMtx([[9,3,2], [8,6,1], [5,5,6], [1,2,8]]))
 """
