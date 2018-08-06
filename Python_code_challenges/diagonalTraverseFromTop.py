@@ -32,7 +32,7 @@ def printDia(mtx, dx, dy):
         tmpStr += str(mtx[dx][dy]) + ' '
     print(tmpStr)
     
-print(printMtx([[9,3,2], [8,6,1], [5,5,6], [1,2,8]]))
+printMtx([[9,3,2], [8,6,1], [5,5,6], [1,2,8]])
 """
 9
 3 8
