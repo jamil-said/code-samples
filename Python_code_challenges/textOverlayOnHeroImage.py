@@ -118,8 +118,6 @@ def textOverlayOnHeroImage(image, height, width):
                     bestSum = bboxSum
                     bestPos = [i, j]
                 bboxSum = 0
-                if i == (len(image)-height) and j == (len(image[0])-width):
-                    return bestPos
                 ########################## You must end your code here
 
 
