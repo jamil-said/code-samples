@@ -9,11 +9,12 @@ you need to delete the first character of both words. Of course, the deletion
 distance between two strings can't be greater than the sum of their total
 ASCII values, because you can always delete both of the strings entirely. 
 Implement an efficient function to find the deletion distance between two 
-strings. 
+strings. You can refer to the Wikipedia article on the algorithm for edit 
+distance if you want to. The algorithm there is not quite the same as the 
+algorithm required here, but it's similar.
 """
 
 def delDis(s1, s2):
-    if len(s1) < len(s2): s1, s2 = s2, s1
     dp = [0] * (len(s2)+1)
     for i in range(1, len(s1)+1):
         tmp = [0]
@@ -43,6 +44,7 @@ print(delDis('cat', '')) #312
 print(delDis('cat', 'cat')) #0
 print(delDis('at', 'cat')) #99
 print(delDis('boat', 'got')) #298
+print(delDis('got', 'boat')) #298
 print(delDis('thought', 'sloughs')) #674
 print(delDis('cat', 'bat')) #197
 print(delDis('sea', 'eat')) #231
