@@ -25,18 +25,14 @@ def delDis(s1, s2):
     return sum(map(ord, s1+s2)) - 2 * dp[-1]
 
 
-""" alternative, slower
-def delDis(str1, str2):
-    lenStr1, lenStr2 = len(str1), len(str2)
-    matchC = [[0] * (lenStr2+1) for x in range(lenStr1+1)]
-    for i in range(lenStr1):
-        for j in range(lenStr2):
-            if str1[i] == str2[j]:
-                matchC[i+1][j+1] = matchC[i][j] + ord(str1[i])
-            else:
-                matchC[i+1][j+1] = max(matchC[i][j+1], matchC[i+1][j])
-    dltDis = sum(map(ord, str1+str2)) - matchC[lenStr1][lenStr2] * 2
-    return dltDis
+""" alternative, slower, but smaller and more intuitive
+def delDis(s1, s2):
+    dp = [[0]*(len(s2)+1) for i in range(len(s1)+1)]
+    for i in range(len(s1)):
+        for j in range(len(s2)):
+            if s1[i] == s2[j]: dp[i+1][j+1] = dp[i][j]+ord(s1[i])
+            else: dp[i+1][j+1] = max(dp[i][j+1], dp[i+1][j])
+    return sum(map(ord, s1+s2)) - 2 * dp[-1][-1]
 """
 
 print(delDis('', 'cat')) #312
