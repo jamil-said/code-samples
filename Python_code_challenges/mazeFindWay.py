@@ -27,7 +27,7 @@ def mazeFW(arr):
 
 def calc(path, ok, tgt, tried, i, j):
     if (i, j) not in ok or (i, j) in tried: return
-    elif (i, j) == tgt and (i, j) in ok: return path+[(i, j)]
+    elif (i, j) == tgt: return path+[(i, j)]
     else: 
         tried.add((i, j))
         return calc(path+[(i, j)], ok, tgt, tried, i+1, j) or \
