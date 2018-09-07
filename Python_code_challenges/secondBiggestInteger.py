@@ -23,4 +23,9 @@ print(secondBig([-5, -7, -9, 29])) # -5
 print(secondBig([1, 2, 3, 4])) # 3
 print(secondBig([1, 2])) # 1
 
+""" Alternative, more natural way of doing this, however with O(nLn)
+def secondBig(arr):
+    return sorted(arr)[-2]
+"""
+
 
