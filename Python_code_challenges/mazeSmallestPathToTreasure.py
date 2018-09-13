@@ -7,7 +7,7 @@ which is hidden somewhere in the maze (the treasure has value 5, and there's
 only one treasure in the maze). If there's no viable path to the treasure, 
 return -1. There are only 1, 0, and 5 values in the maze. Return an integer 
 that represents the minimum path value which has to be traversed to arrive 
-at the treasure. 
+at the treasure.
 
 For example:
 
@@ -20,6 +20,7 @@ would return 3, as one would have to traverse the maze elements (0,0),
 """
 
 def mazeFind(maze):
+    if not maze or not maze[0]: return -1
     if maze[0][0] == 5: return 0
     ok, result = set(), []
     for i in range(len(maze)):
@@ -45,4 +46,7 @@ print(mazeFind([[1, 1, 1, 1], [0, 1, 1, 1], [0, 1, 0, 1], [1, 1, 5, 1],
 [0, 0, 1, 1]])) #5
 print(mazeFind([[0, 0, 0], [1, 0, 0], [1, 5, 1]])) #-1
 print(mazeFind([[5, 0, 0], [1, 0, 0], [1, 5, 1]])) # 0
+print(mazeFind([[]])) # -1
+print(mazeFind([])) # -1
+
 
