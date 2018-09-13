@@ -34,9 +34,9 @@ def calc(path, ok, tgt, vis, i, j, result):
     elif (i,j) not in ok or (i,j) in vis: return
     else:
         vis.add((i,j))
-        return calc(path+[1], ok, tgt, vis, i+1, j, result) or \
-        calc(path+[1], ok, tgt, vis, i, j+1, result) or \
-        calc(path+[1], ok, tgt, vis, i-1, j, result) or \
+        calc(path+[1], ok, tgt, vis, i+1, j, result)
+        calc(path+[1], ok, tgt, vis, i, j+1, result)
+        calc(path+[1], ok, tgt, vis, i-1, j, result)
         calc(path+[1], ok, tgt, vis, i, j-1, result)
             
 
