@@ -20,6 +20,7 @@ would return 3, as one would have to traverse the maze elements (0,0),
 """
 
 def mazeFind(maze):
+    if maze[0][0] == 5: return 0
     ok, result = set(), []
     for i in range(len(maze)):
         for j in range(len(maze[0])):
@@ -43,3 +44,5 @@ print(mazeFind([[1, 0, 0], [1, 0, 0], [1, 5, 1]])) #3
 print(mazeFind([[1, 1, 1, 1], [0, 1, 1, 1], [0, 1, 0, 1], [1, 1, 5, 1], 
 [0, 0, 1, 1]])) #5
 print(mazeFind([[0, 0, 0], [1, 0, 0], [1, 5, 1]])) #-1
+print(mazeFind([[5, 0, 0], [1, 0, 0], [1, 5, 1]])) # 0
+
