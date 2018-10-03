@@ -1,11 +1,11 @@
-# Battle of Submarines -- Python 3 Battleship Game Played in a 3D Battlefield
+# Battle of Submarines -- Python 3 Object Oriented Programming (OOP) -- A Battleship Game Played in a 3D Battlefield
 
 ## How to Run the Game
 
-This game is text-based and a little rudimentary, but it runs smoothly (as far as I know!). One way to run this game is the following:
+This game is text-based and a little rudimentary, but it runs smoothly. One way to run this game is the following:
 
 * Copy game folder to your computer and make sure to make all .py files executable
-* Open Bash (shell) terminal
+* Open Bash (shell) terminal (e.g.: in a Linux machine with Python 3 installed)
 * Change the working directory to the game directory (e.g.: cd /battleofsubs)
 * Type ./game.py and then press "Enter"
     

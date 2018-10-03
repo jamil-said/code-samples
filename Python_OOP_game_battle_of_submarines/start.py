@@ -4,6 +4,8 @@
 # Code by Jamil Said Jr. -- Copyright (C) 2018 Jamil Said Jr
 # Developed on a Debian 9, Python 3.5.3, GNU Bash 4.4.12 environment
 
+from print_manual import Print_Manual
+
 class Start:
     """
     This class collects information from the players at the beginning of
@@ -12,7 +14,9 @@ class Start:
     
     def start_game(self):
         
+        # Create game objects 
         dic_players = {}
+        print_manual_obj = Print_Manual()
         
         # Welcome greeting
         def prompt_start():
@@ -31,20 +35,14 @@ class Start:
             prompt += '\n\nAhoy, Captain! Make your choice:\n'
             ans = input(prompt)
             if ans in manual: 
-                print_manual()
+                print_manual_obj.print_manual()
+                prompt_control()
             elif ans in exiting:
                 return
             elif ans in starting:
                 start_input()
             else:
                 error_input_start()
-
-        # Print Manual to screen and return to initial options
-        def print_manual():
-            with open('manual.txt') as f_obj:
-                cont_man = f_obj.read()
-            print('\n' + cont_man)
-            prompt_control()
 
         # Handle input error on initial options
         def error_input_start():
@@ -58,6 +56,7 @@ class Start:
         # Collect players information. Replace certain punctuation characters
         # from player's input (ex: ',', ':', etc.) not to interfere with code later
         # Players input will also be joined with player number for security and control
+        # Give each player 3 subs, one of each type (to be defined later)
         def start_input():
             set_players = {'2', '3', '4'}
             prompt = '\nAhoy, Captain! How many players will play? (2, 3 or 4)\n'

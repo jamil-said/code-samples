@@ -13,16 +13,22 @@ from game_controller import Game_Controller
 
 class Game: 
     """
-    This class sets a new game and fowards the objects to the game controller.
+    This class gets players' input from another class, sets a new game 
+    and fowards the new game objects to a controller class.
     """
     
     def set_game(self):
+        
+        # Create game objects
         dic_ships = {}
         dic_pos = {}
         list_ships_name = []
         list_players = []
+        controller_obj = Game_Controller()
         start_obj = Start()
         dic_players = start_obj.start_game()
+        
+        # Check that players' input was received
         if not dic_players:
             return 'Game Over! We cannot play a game without players!'
        
@@ -32,7 +38,7 @@ class Game:
             list_ships_name.append(key+'_'+'Sub_Fixer')
             list_ships_name.append(key+'_'+'Sub_Master')
         
-        # Create ship objects and assign them to corresponding names in dictionary
+        # Instantiate ship objects and assign them to corresponding names in dictionary
         for i in range(0, len(dic_players)*3, 3):
             dic_ships[list_ships_name[i]] = Ship_A(list_ships_name[i])
             dic_ships[list_ships_name[i+1]] = Ship_F(list_ships_name[i+1])
@@ -55,7 +61,6 @@ class Game:
 
         # Send relevant game objects to the class that will start the game
         # and control its flow
-        controller_obj = Game_Controller()
         controller_obj.game_controller(dic_players, dic_ships, dic_pos
         , list_players)
 
