@@ -1,0 +1,5 @@
+etl_test
+root
+d2hhdGV2ZXI=
+127.0.0.1
+3306
