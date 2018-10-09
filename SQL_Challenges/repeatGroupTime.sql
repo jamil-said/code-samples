@@ -1,5 +1,7 @@
 
-/* repeatGroupTime -- postgreSQL
+-- MySQL and PostgreSQL tested
+
+/* repeatGroupTime
 Given a table "groups" as following:
 
     CREATE TABLE groups (
@@ -44,7 +46,8 @@ ON gr1.group_number = gr2.group_number
 AND gr1.time = (SELECT time FROM groups tmp1 
     WHERE tmp1.group_number=gr1.group_number ORDER BY time DESC LIMIT 1)
 AND gr2.time = (SELECT time FROM groups tmp2 
-    WHERE tmp2.group_number=gr2.group_number ORDER BY time DESC LIMIT 1 OFFSET 1);
+    WHERE tmp2.group_number=gr2.group_number ORDER BY time DESC LIMIT 1 OFFSET 1)
+ORDER BY group_number ASC;
 
 
 /* expected result

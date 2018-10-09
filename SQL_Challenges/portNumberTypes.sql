@@ -1,5 +1,7 @@
 
-/* portNumberTypes -- postgreSQL
+-- MySQL and PostgreSQL tested
+
+/* portNumberTypes
 Given a table "groups" as following:
 
     CREATE TABLE groups (
