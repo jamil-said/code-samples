@@ -33,7 +33,7 @@ following report (order by highest score):
 
 */
 
-SELECT sc.Score, (SELECT COUNT(1) + 1 FROM (SELECT DISTINCT Score FROM Scores
+SELECT sc.Score, (SELECT COUNT(*) + 1 FROM (SELECT DISTINCT Score FROM Scores
     ) AS scr WHERE Score > sc.Score) AS Rank
 FROM Scores sc
 ORDER BY Score DESC;
