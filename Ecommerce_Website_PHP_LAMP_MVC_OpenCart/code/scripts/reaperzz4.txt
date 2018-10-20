@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## reaperzz version 1.0.0
+## This file is part of the reaperzz program. This program is a "vehicule"  
+## to run other program's code at boot (ex: delete temporary files, fix mouse 
+## calibration in a specific computer, etc.). Note: NOT run as root.
+
+###this script runs with NO ROOT PRIVILEGES
+
+##########code for Powerzz: sleep, then check for temporary files for battery monitor, and delete them if found
+
+#sleep
+sleep 5
+
+#check for temporary files for battery monitor, and delete them if found
+if [[ -e /tmp/powerzz-total-exit-1 ]]; then rm -f /tmp/powerzz-total-exit-1 > /dev/null 2>&1; fi
+if [[ -e /tmp/powerzz-running-hiber-1 ]]; then rm -f /tmp/powerzz-running-hiber-1 > /dev/null 2>&1; fi
+if [[ -e /tmp/powerzz-warning-shown-1 ]]; then rm -f /tmp/powerzz-warning-shown-1 > /dev/null 2>&1; fi
+
+##########end of code for Powerzz
+
+#sleep 2 and exit
+sleep 2
+exit 0

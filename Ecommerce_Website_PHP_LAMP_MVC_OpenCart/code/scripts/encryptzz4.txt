@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## encryptzz version 1.0.1
+## This file is part of the encryptzz program. This program will attempt
+## to encrypt files or folders using the program p7zip capabilities.
+
+filefolder="$1"
+extension=".7z"
+filefolder7z="$filefolder$extension"
+if [ -f "$filefolder7z" ]; then
+zenity --question --width=250 --height=150 --title="File and Folder Encryption" --text="\nA file named $filefolder7z already exists in this folder. \nWould you like to overwrite the existing file? \n\nTo CANCEL the encryption, press the button \"Cancel\"\; Otherwise, press \"Overwrite and Encrypt\" to continue. \n" --ok-label="Overwrite and Encrypt" --cancel-label="Cancel"
+rc="$?"
+if [[ "$rc" -eq 1 ]] ; then
+    # user clicked Cancel
+    exit 0
+else
+rm "$filefolder7z"
+sleep 0.3
+lxterminal -e 7z a -p -t7z -mx0 -mhe=on "$filefolder7z" "$filefolder"
+sleep 1
+exit 0
+fi
+fi
+lxterminal -e 7z a -p -t7z -mx0 -mhe=on "$filefolder7z" "$filefolder"
+sleep 1
+exit 0

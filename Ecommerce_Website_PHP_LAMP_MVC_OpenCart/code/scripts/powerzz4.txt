@@ -1,0 +1,115 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## powerzz version 1.0.1
+## This file is part of the powerzz program. This program will attempt
+## to monitor battery levels and hibernate/shutdown the computer when the battery
+## is close to be drained. This program relies on the program reaperzz to double-check
+## that certain temporary files are deleted at boot.
+
+#the following comments are repeated on powerzz4 and powerzz7 (if updating, please update both):
+#there are 3 temporary control files for powerzz: /tmp/powerzz-total-exit-1 , /tmp/powerzz-running-hiber-1 , /tmp/powerzz-warning-shown-1
+#there are 3 non-temporary controls (3 files) for powerzz: /usr/local/.extra-copies/no-hibernation.txt , ~/.bat-monitor-chose-shutdown.txt and ~/.bat-monitor-chose-off.txt
+
+#test if battery is charging, and if yes should exit right away
+varcheck1="Charging,"
+varcheck2="Full,"
+batcheckexit1="$(acpi -b | awk 'NR==1 {print $3}')"; if [[ -z "$batcheckexit1" ]]; then batcheckexit1="emptyvariable"; fi
+if [[ "$batcheckexit1" == "$varcheck1" ]] || [[ "$batcheckexit1" == "$varcheck2" ]]; then 
+  if [[ -e /tmp/powerzz-total-exit-1 ]]; then rm -f /tmp/powerzz-total-exit-1 > /dev/null 2>&1; fi  #if battery is recharging, then temporary control files can be deleted
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then rm -f /tmp/powerzz-running-hiber-1 > /dev/null 2>&1; fi
+  if [[ -e /tmp/powerzz-warning-shown-1 ]]; then rm -f /tmp/powerzz-warning-shown-1 > /dev/null 2>&1; fi
+  exit 0
+fi
+varcheck3="fully-charged"
+varcheck4="charging"
+batcheckexit2="$(upower -i "$(upower -e | grep -i 'BAT')" | grep -i 'state:' | awk 'NR==1 {print $2}')"; if [[ -z "$batcheckexit2" ]]; then batcheckexit2="emptyvariable"; fi
+if [[ "$batcheckexit2" == "$varcheck3" ]] || [[ "$batcheckexit2" == "$varcheck4" ]]; then
+  if [[ -e /tmp/powerzz-total-exit-1 ]]; then rm -f /tmp/powerzz-total-exit-1 > /dev/null 2>&1; fi #if battery is recharging, then temporary control files can be deleted
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then rm -f /tmp/powerzz-running-hiber-1 > /dev/null 2>&1; fi
+  if [[ -e /tmp/powerzz-warning-shown-1 ]]; then rm -f /tmp/powerzz-warning-shown-1 > /dev/null 2>&1; fi
+  exit 0
+fi
+
+#specifically check if batteries are discharging, and if not, exit
+batcheckdischar1="$(acpi -b 2> /dev/null | grep -s 'Discharg' | grep -s 'Discharg')"  #here making this grep case sensitive to lower chance of grabbing other blabbing that includes the searched word. Double grep helps preventing that a possible error message make the variable not empty
+batcheckdischar2="$(upower -i "$(upower -e | grep -i 'BAT')" | grep -i 'state:' | awk 'NR==1' | grep -i 'discharg')"
+batcheckdischar3="$(acpi -b 2> /dev/null | awk 'NR==1 {print $3}' | grep -si 'Discharg')"
+if [[ -z "$batcheckdischar1" ]] && [[ -z "$batcheckdischar2" ]] && [[ -z "$batcheckdischar3" ]]; then exit 0; fi > /dev/null 2>&1
+
+#if battery is not charging but certain temporary control files are present, it means that the user interacted with the program and asked it to stop managing battery temporarily (thus exit immediatly). 
+#note that those control files reset when the computer is restarted, when it starts to be recharged again or right before it hibernates/shutdown
+if [[ -e /tmp/powerzz-total-exit-1 ]]; then exit 0; fi > /dev/null 2>&1
+if [[ -e /tmp/powerzz-running-hiber-1 ]]; then exit 0; fi > /dev/null 2>&1
+
+#find user who logged in
+rootendas="root"
+userpowerzz="$(who 2>/dev/null | awk 'NR==1 {print $1}')"
+if [[ -z "$userpowerzz" ]] || [[ "$userpowerzz" == "$rootendas" ]]; then
+  userpowerzz="$(w -h 2>/dev/null | awk 'NR==1 {print $1}')"
+  if [[ -z "$userpowerzz" ]] || [[ "$userpowerzz" == "$rootendas" ]]; then userpowerzz="owner"; fi   #if tests to find user all fail, then the battery monitor preferences of user account that shipped with computer will be observed.
+fi  
+
+#find path to home 
+hometesttil="~"
+hometesttilplus="$hometesttil$userpowerzz"
+homeecho="$(bash -c "echo $hometesttilplus")"
+homegrep="$(grep -i "$userpowerzz" /etc/passwd | cut -d ":" -f6)"
+hometestend="/.config"
+hometest1="$homegrep$hometestend"
+hometest2="$homeecho$hometestend"
+if [[ -d "$hometest1" ]]; then
+  homepowerzz="$homegrep"
+elif [[ -d "$hometest2" ]]; then
+  homepowerzz="$homeecho"
+else
+  homepowerzz="/home/owner"  #if tests to find home all fail, then the battery monitor preferences of user account that shipped with computer will be observed.
+fi
+
+#Check for non-temporary "monitor off" control file, to see if needs to exit program
+fileendoff="/.bat-monitor-chose-off.txt"
+controlfileoff="$homepowerzz$fileendoff"
+if [[ -e "$controlfileoff" ]]; then exit 0 ; fi
+
+#check charge level, and if lower than trigger levels, take action
+batcheckchar1="$(acpi -b | awk 'NR==1 {print $4}' | grep -i '%' | sed 's/[^0-9]*//g')"; if [[ -z "$batcheckchar1" ]]; then batcheckchar1="90"; fi
+batcheckchar2="$(upower -i "$(upower -e | grep -i 'BAT')" | grep -i 'percentage:' | awk 'NR==1' | sed 's/[^0-9]*//g')"; if [[ -z "$batcheckchar2" ]]; then batcheckchar2="90"; fi
+batcheckchar3="$(acpi -b | awk '{print $0}' RS=' ' | grep -m 1 '%' | grep -o '[0123456789]*')"; if [[ -z "$batcheckchar3" ]]; then batcheckchar3="90"; fi
+#mkdir -p /var/log/apt/upshutzz; echo "$batcheckchar1" >> /var/log/apt/upshutzz/zz4-battery-discharge.txt; echo "$batcheckchar2" >> /var/log/apt/upshutzz/zz4-battery-discharge.txt; echo "$batcheckchar3" >> /var/log/apt/upshutzz/zz4-battery-discharge.txt #uncomment to record battery discharging
+batmin1="8"
+if [[ "$batcheckchar1" -lt "$batmin1" ]] || [[ "$batcheckchar2" -lt "$batmin1" ]] || [[ "$batcheckchar3" -lt "$batmin1" ]]; then
+  if [[ -e /tmp/powerzz-total-exit-1 ]]; then exit 0; fi > /dev/null 2>&1
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then exit 0; fi > /dev/null 2>&1
+  killall powerzz6 > /dev/null 2>&1  #killing the lowbat warning, if present; may otherwise interfere because it wants to be on top all the time.
+  wmctrl -c "Battery Charge is Low" > /dev/null 2>&1
+  echo "running" > /tmp/powerzz-running-hiber-1 2> /dev/null
+  nohup /usr/local/bin/powerzz5 > /dev/null 2>&1 &
+  sleep 3
+  exit 0
+fi
+batmin2="16"
+if [[ "$batcheckchar1" -lt "$batmin2" ]] || [[ "$batcheckchar2" -lt "$batmin2" ]] || [[ "$batcheckchar3" -lt "$batmin2" ]]; then
+  if [[ -e /tmp/powerzz-total-exit-1 ]]; then exit 0; fi > /dev/null 2>&1
+  if [[ -e /tmp/powerzz-running-hiber-1 ]]; then exit 0; fi > /dev/null 2>&1
+  if [[ -e /tmp/powerzz-warning-shown-1 ]]; then exit 0; fi > /dev/null 2>&1
+  echo "low-bat-warning-shown" > /tmp/powerzz-warning-shown-1 2> /dev/null
+  nohup /usr/local/bin/powerzz6 > /dev/null 2>&1 &
+  sleep 3
+  exit 0
+fi
+
+exit 0

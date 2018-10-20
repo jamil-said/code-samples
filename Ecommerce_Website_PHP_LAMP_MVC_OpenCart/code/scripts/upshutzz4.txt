@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## upshutzz version 1.0.0
+## This file is part of the upshutzz program. This program will attempt
+## to automatically update and then shutdown your computer.
+
+#declare some variables, make sure folder exists
+mkdir -p /var/log/apt/upshutzz
+dirstore="/var/log/apt/upshutzz/"
+logdata="$(date +"%F")"
+exten="-upshutzz.log"
+lognome="$dirstore$logdata$exten"
+
+#upshutzz starts here
+echo "------- System Update and Shutdown Started $(date) -------" >> "$lognome"
+sleep 1
+
+#check for software package errors and fix them
+DEBIAN_FRONTEND=noninteractive dpkg --force-confdef --force-confold --configure -a >> "$lognome" 2>&1
+sleep 1
+DEBIAN_FRONTEND=noninteractive apt-get -y -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" install -f >> "$lognome" 2>&1
+sleep 1
+DEBIAN_FRONTEND=noninteractive dpkg --force-confdef --force-confold --configure -a >> "$lognome" 2>&1
+sleep 1
+
+#update and upgrade (update software packages)
+DEBIAN_FRONTEND=noninteractive apt-get -y update >> "$lognome" 2>&1
+sleep 2
+DEBIAN_FRONTEND=noninteractive apt-get -y -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade >> "$lognome" 2>&1
+sleep 2
+
+#check for flash plug in for firefox, and if installed, update it to a newer version (if available). If flash is not installed do nothing.
+checkflash1="$(dpkg -s flashplugin-nonfree | grep -i "not installed")"
+checkflash2="$(which update-flashplugin-nonfree)"
+if [[ -z "$checkflash1" ]] || [[ -n "$checkflash2" ]]; then
+DEBIAN_FRONTEND=noninteractive update-flashplugin-nonfree --install --verbose >> "$lognome" 2>&1
+fi
+sleep 2
+
+#check for flash plug in for chromium, and if installed, update it to a newer version (if available). If flash is not installed do nothing.
+checkflash3="$(dpkg -s pepperflashplugin-nonfree | grep -i "not installed")"
+checkflash4="$(which update-pepperflashplugin-nonfree)"
+if [[ -z "$checkflash3" ]] || [[ -n "$checkflash4" ]]; then
+DEBIAN_FRONTEND=noninteractive update-pepperflashplugin-nonfree --install --verbose >> "$lognome" 2>&1
+fi
+sleep 2
+
+#end of main upshutzz work
+echo "------- System Update and Shutdown Ended $(date) -------" >> "$lognome"
+
+#kill zenity and other scripts
+killall upshutzz3 >> "$lognome" 2>&1
+killall zenity >> "$lognome" 2>&1
+sleep 1
+
+#exit and shutdown system 
+systemctl poweroff
+exit 0

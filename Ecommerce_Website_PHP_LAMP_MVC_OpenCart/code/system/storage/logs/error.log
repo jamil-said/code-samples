@@ -1,0 +1,45 @@
+2016-10-08 8:49:02 - PHP Notice:  Undefined variable: product_info in /home/adorad5/public_html/shop/catalog/view/theme/default/template/product/product.tpl on line 127
+2016-10-17 4:45:07 - Unable to create Paypal session{"TIMESTAMP":"2016-10-17T04:45:07Z","CORRELATIONID":"1fd1b0db8ffd1","ACK":"Failure","VERSION":"109.0","BUILD":"26106709","L_ERRORCODE0":"10002","L_SHORTMESSAGE0":"Security error","L_LONGMESSAGE0":"Security header is not valid","L_SEVERITYCODE0":"Error"}
+2016-10-17 9:06:40 - PHP Notice:  Undefined index: comment in /home/adorad5/public_html/catalog/controller/checkout/payment_method.php on line 186
+2016-10-28 4:35:42 - PHP Notice:  Undefined index: SECURETOKENID in /home/adorad5/public_html/catalog/controller/extension/payment/pp_payflow_iframe.php on line 109
+2016-11-22 3:17:44 - PHP Warning:  fsockopen(): SSL operation failed with code 1. OpenSSL Error messages:
+error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol in /home/adorad5/public_html/system/library/mail.php on line 167
+2016-11-22 3:17:44 - PHP Warning:  fsockopen(): Failed to enable crypto in /home/adorad5/public_html/system/library/mail.php on line 167
+2016-11-22 3:17:44 - PHP Warning:  fsockopen(): unable to connect to ssl://adoradeal.com:587 (Unknown error) in /home/adorad5/public_html/system/library/mail.php on line 167
+2016-11-22 5:15:13 - PHP Warning:  fsockopen(): SSL operation failed with code 1. OpenSSL Error messages:
+error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol in /home/adorad5/public_html/system/library/mail.php on line 167
+2016-11-22 5:15:13 - PHP Warning:  fsockopen(): Failed to enable crypto in /home/adorad5/public_html/system/library/mail.php on line 167
+2016-11-22 5:15:13 - PHP Warning:  fsockopen(): unable to connect to ssl://vps23899.inmotionhosting.com:587 (Unknown error) in /home/adorad5/public_html/system/library/mail.php on line 167
+2018-03-06 11:53:55 - PHP Notice:  Undefined index: enquiry in /home/adorad5/public_html/catalog/controller/information/contact.php on line 171
+2018-03-27 12:38:30 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:30 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:31 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:31 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:31 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:31 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:32 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:32 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:32 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:32 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:33 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:33 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:33 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:33 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:34 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:34 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:34 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:34 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:35 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:35 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:35 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:35 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:36 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:36 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:36 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:36 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-03-27 12:38:37 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 386
+2018-03-27 12:38:37 - PHP Notice:  Undefined index: country_id in /home/adorad5/public_html/catalog/controller/account/register.php on line 392
+2018-07-28 9:44:57 - PHP Notice:  Undefined index: enquiry in /home/adorad5/public_html/catalog/controller/information/contact.php on line 171
+2018-08-17 19:59:07 - PHP Notice:  Undefined index: enquiry in /home/adorad5/public_html/catalog/controller/information/contact.php on line 171
+2018-08-17 19:59:51 - PHP Notice:  Undefined index: enquiry in /home/adorad5/public_html/catalog/controller/information/contact.php on line 171
+2018-08-17 20:19:36 - PHP Notice:  Undefined index: enquiry in /home/adorad5/public_html/catalog/controller/information/contact.php on line 171

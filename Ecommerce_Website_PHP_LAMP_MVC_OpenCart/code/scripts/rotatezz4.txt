@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## rotatezz version 1.0.0
+## This file is part of the rotatezz program. This program will attempt
+## to rotate the screen orientation of your computer in a clockwise way.
+
+## Important notes: in case of a wacom being present, need to update the device name (or number, if many devices present with same name, 
+## although risky because numbers can change), and comment/uncomment specific lines below, including the "xsetwacom set" line.
+## Also, when rotating, the touchscreen not always invert the touch map; in addition, the calibration (that works for normal) won't work well 
+## because it will be inverted. Thus, uncomment lines below (changing the device name) to swap axis as it rotates, and also swap calibration 
+##(1st value swaps with 3 value, and the second swaps with the 4th)
+
+varinormal="normal"
+varileft="left"
+variinvert="inverted"
+variright="right"
+rotando="$(xrandr -q --verbose 2>/dev/null | grep -si "connected" | grep -svi "disconnected" | grep -osi ') normal (\|) left (\|) inverted (\|) right (' | grep -osi 'normal\|left\|inverted\|right')"
+rotandolow="${rotando,,}"
+if [[ -z "$rotandolow" ]]; then rotandolow="nulo"; fi
+if [[ "$rotandolow" != "$varinormal" ]] && [[ "$rotandolow" != "$varileft" ]] && [[ "$rotandolow" != "$variinvert" ]] && [[ "$rotandolow" != "$variright" ]]; then 
+  rotando="$(xrandr -q --verbose 2>/dev/null | grep -si ' connected ' | grep -osi 'normal\|left\|inverted\|right' | grep -si -m 1 'normal\|left\|inverted\|right')"
+  rotandolow="${rotando,,}"
+  if [[ -z "$rotandolow" ]]; then rotandolow="nulo"; fi
+fi
+
+#if normal, rotate to "right". 
+if [[ "$rotandolow" == "$varinormal" ]]; then
+  xrandr -o right
+  #xsetwacom set "9" rotate cw
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axes Swap" 1
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axis Inversion" 0 1
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axis Calibration" 1399 15891 421 15482
+  sleep 0.3
+  lxpanelctl restart
+
+#if right, rotate to "inverted"
+elif [[ "$rotandolow" == "$variright" ]]; then
+  xrandr -o inverted
+  #xsetwacom set "9" rotate half
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axes Swap" 0
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axis Inversion" 1 1
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axis Calibration" 421 15482 1399 15891
+  sleep 0.3
+  lxpanelctl restart
+
+#if inverted, rotate to "left"
+elif [[ "$rotandolow" == "$variinvert" ]]; then
+  xrandr -o left
+  #xsetwacom set "9" rotate ccw
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axes Swap" 1
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axis Inversion" 1 0
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axis Calibration" 1399 15891 421 15482
+  sleep 0.3
+  lxpanelctl restart
+
+#if left, rotate to "normal"
+elif [[ "$rotandolow" == "$varileft" ]]; then
+  xrandr -o normal
+  #xsetwacom set "9" rotate none
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axes Swap" 0
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axis Inversion" 0 0
+  ##xinput set-prop "Fujitsu Component USB Touch Panel" "Evdev Axis Calibration" 421 15482 1399 15891
+  sleep 0.3
+  lxpanelctl restart
+  
+#if something else, then exit
+else exit;
+fi
+
+exit 0

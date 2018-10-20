@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## powerzz version 1.0.1
+## This file is part of the powerzz program. This program will attempt
+## to monitor battery levels and hibernate/shutdown the computer when the battery
+## is close to be drained. This program relies on the program reaperzz to double-check
+## that certain temporary files are deleted at boot.
+
+#find user who logged in
+rootendas="root"
+userpowerzz="$(who 2>/dev/null | awk 'NR==1 {print $1}')"
+if [[ -z "$userpowerzz" ]] || [[ "$userpowerzz" == "$rootendas" ]]; then
+  userpowerzz="$(w -h 2>/dev/null | awk 'NR==1 {print $1}')"
+  if [[ -z "$userpowerzz" ]] || [[ "$userpowerzz" == "$rootendas" ]]; then userpowerzz="owner"; fi   #if tests to find user all fail, then the battery monitor preferences of user account that shipped with computer will be observed.
+fi  
+
+#find path to home 
+hometesttil="~"
+hometesttilplus="$hometesttil$userpowerzz"
+homeecho="$(bash -c "echo $hometesttilplus")"
+homegrep="$(grep -i "$userpowerzz" /etc/passwd | cut -d ":" -f6)"
+hometestend="/.config"
+hometest1="$homegrep$hometestend"
+hometest2="$homeecho$hometestend"
+if [[ -d "$hometest1" ]]; then
+  homepowerzz="$homegrep"
+elif [[ -d "$hometest2" ]]; then
+  homepowerzz="$homeecho"
+else
+  homepowerzz="/home/owner"  #if tests to find home all fail, then the battery monitor preferences of user account that shipped with computer will be observed.
+fi
+
+#Check for non-temporary "monitor off" control file, to see if needs to exit program
+fileendoff="/.bat-monitor-chose-off.txt"
+controlfileoff="$homepowerzz$fileendoff"
+if [[ -e "$controlfileoff" ]]; then exit 0 ; fi
+
+#check the battery monitor's current status
+fileendshut="/.bat-monitor-chose-shutdown.txt"
+controlfileshut="$homepowerzz$fileendshut"
+controlfilenohiber="/usr/local/.extra-copies/no-hibernation.txt"
+if [[ -e "$controlfilenohiber" ]] || [[ -e "$controlfileshut" ]]; then
+  currentstatus="shutdown"
+else 
+  currentstatus="hibernation"
+fi
+
+#keep zenity message always on top
+(while true; do wmctrl -a "Battery Charge is Low"; sleep 1; done) > /dev/null 2>&1 &
+
+#zenity message 
+zenity --warning --width=300 --height=150 --title="Battery Charge is Low" --text="\nWARNING: the battery charge is running low (15\% or less). Please plug your computer to an electrical outlet soon! \n\nPlease note that upon reaching a critical battery level (7\% or less), your computer will warn you again and start \nthe $currentstatus process. \n\nYou can manage this battery monitoring program on: Main Menu > System Tools > Battery Monitor \n"
+
+exit 0

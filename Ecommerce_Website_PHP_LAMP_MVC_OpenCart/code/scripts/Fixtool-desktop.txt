@@ -1,0 +1,30 @@
+[Desktop Entry]
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## fixtoolzz version 1.0.1
+## This file is part of the fixtoolzz program. This program will attempt
+## to deep update (dist-upgrade) and fix some usual problems on your computer.
+
+Encoding=UTF-8
+Name=Deep Update & Computer Fix
+Comment=Deep Update & Computer Fix
+Exec=/usr/bin/gksudo --message "\nThis program will perform a deep update on your computer (using apt-get dist-upgrade) and will check for and try to fix some common problems that may exist on your system. We recommend using this program only when something is not working properly (please consult the \"User Guide\" for more information). This program requires password authentication. Please type your user password and click OK to proceed, or click Cancel to exit." /usr/local/bin/fixtool
+Terminal=true
+Type=Application
+Icon=applications-system
+Categories=System;
+

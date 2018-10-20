@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## radiozz version 1.0.0
+## This file is part of the radiozz program. The radiozz program will
+## attempt to turn on all wireless radios available on your computer.
+
+#zenity message that program is working - IMPORTANT: if change title of zenity, must update the command to kill it on other script(s)
+sleep 10800 | zenity --progress --no-cancel --auto-close --pulsate --width=300 --height=150 --title="Enabling All Wireless Radios" --text="\nPLEASE DO NOT START PROGRAMS OR SHUTDOWN YOUR COMPUTER! \n\nThis program is enabling all wireless radios available on your computer. \n\nUpon sucessful completion, this program will SHUTDOWN your computer. On the next boot after that, \nthe wireless radios should be all turned on and ready to use. \n\nPlease note that there might be additional PHYSICAL switches on the exterior of your computer which \nmight turn off wireless radios. After running this program, check your computer externally for such switches. \n\nThis program normally concludes within a minute or two. It started on $(date) \n\n"
+
+exit 0

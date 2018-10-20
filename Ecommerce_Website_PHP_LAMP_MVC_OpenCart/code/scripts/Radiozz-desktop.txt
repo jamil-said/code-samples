@@ -1,0 +1,29 @@
+[Desktop Entry]
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## radiozz version 1.0.0
+## This file is part of the radiozz program. The radiozz program will
+## attempt to turn on all wireless radios available on your computer.
+
+Encoding=UTF-8
+Name=Turn On All Wireless Radios
+Comment=Turn On All Wireless Radios
+Exec=/usr/bin/gksudo --message "\nPLEASE CLOSE DOWN ALL OPEN FILES AND PROGRAMS BEFORE STARTING THIS PROGRAM. This program will enable all available wireless radios on your computer, and upon completion, it will SHUTDOWN your computer. On the next boot after that, the wireless radios should be all turned on and ready to use. Please note that there might be additional PHYSICAL switches on the exterior of your computer which might turn off wireless radios - after running this program, check your computer externally for such switches. This program requires password authentication. Please type your user password and click OK to proceed, or click Cancel to exit." /usr/local/bin/radiozz4
+Terminal=false
+Type=Application
+Icon=applications-system
+Categories=System;

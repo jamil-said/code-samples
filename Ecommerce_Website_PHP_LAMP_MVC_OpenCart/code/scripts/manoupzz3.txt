@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## manoupzz version 1.0.0
+## This file is part of the manoupzz program. This program will attempt
+## to prepare for update and update your computer using the program gpk-update-viewer
+
+#zenity message - IMPORTANT: if change title of zenity, must update the command to kill it on other script(s)
+sleep 10800 | zenity --progress --no-cancel --auto-close --pulsate --width=300 --height=200 --title="System Update Started" --text="\nYour computer is checking for updates, and starting the update process. \n\nIn a few minutes you will be shown the available updates. \n\nDuring updates your computer can become slower and programs may misbehave, thus \nwe recommend that you close all open programs and files before starting the update.\n\n"
+exit 0

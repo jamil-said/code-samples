@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="cart.tpl" local="131204700000000000" remote="131204700000000000" testing="0" />
+<file name="checkout.tpl" local="131145084000000000" remote="131145084000000000" testing="0" />
+<file name="confirm.tpl" local="131239260000000000" remote="131239260000000000" testing="0" />
+<file name="guest.tpl" local="131545116000000000" remote="131545116000000000" testing="0" />
+<file name="guest_shipping.tpl" local="131145084000000000" remote="131145084000000000" testing="0" />
+<file name="login.tpl" local="131145084000000000" remote="131145084000000000" testing="0" />
+<file name="payment_address.tpl" local="131545116000000000" remote="131545116000000000" testing="0" />
+<file name="payment_method.tpl" local="131211612000000000" remote="131211612000000000" testing="0" />
+<file name="register.tpl" local="131545116000000000" remote="131545116000000000" testing="0" />
+<file name="shipping_address.tpl" local="131145084000000000" remote="131145084000000000" testing="0" />
+<file name="shipping_method.tpl" local="131211612000000000" remote="131211612000000000" testing="0" />
+</dwsync>

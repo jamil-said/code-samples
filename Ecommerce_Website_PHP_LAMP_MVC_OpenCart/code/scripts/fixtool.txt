@@ -1,0 +1,189 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## fixtoolzz version 1.0.1
+## This file is part of the fixtoolzz program. This program will attempt
+## to deep update (dist-upgrade) and fix some usual problems on your computer.
+
+#declare some variables, make sure folder exists
+if [ "$SUDO_USER" ]; then userzz4="$SUDO_USER"; else userzz4="$(whoami)"; fi
+mkdir -p /var/log/apt/fixtool
+dirstore="/var/log/apt/fixtool/"
+logdata="$(date +"%F")"
+exten="-fixtool.log"
+lognome="$dirstore$logdata$exten"
+rootendas="root"
+userzz4low="${userzz4,,}"
+dirstoreas="/var/lib/AccountsService/users/"
+accountserv="$dirstoreas$userzz4"
+hometesttil="~"
+hometesttilplus="$hometesttil$userzz4"
+homeecho="$(bash -c "echo $hometesttilplus")"
+xscreen1="/.xscreensaver"
+homeechoxscreen1="$homeecho$xscreen1"
+
+#test to see that user was determined and is suitable, otherwise exit
+if [[ "$userzz4" == "$rootendas" ]] || [[ "$userzz4low" == "$rootendas" ]] || [[ -z "$userzz4" ]] ; then
+echo "The program could not correctly determine the user information, or you are trying to run this program directly as root. This program MUST be run via Sudo or Gksudo by an authorized user. We identified the user as $userzz4 . Please note this program will exit without completing in 30 seconds" 2>&1 | tee -a "$lognome"
+sleep 30
+exit
+fi
+
+#fixtool starts here
+echo "Fixtool started, please wait, this can take tens of minutes, sometimes with no visible action. Your computer will automatically SHUTDOWN when this program finishes. Started at $(date)" 2>&1 | tee -a "$lognome"
+sleep 1
+
+#make sure internet radios are on
+nmcli radio all on 2>&1 | tee -a "$lognome"
+sleep 8
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#make sure that bluetooth radio is on
+systemctl enable bluetooth.service 2>&1 | tee -a "$lognome"
+sleep 3
+systemctl start bluetooth.service 2>&1 | tee -a "$lognome"
+sleep 8
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#make sure that chosen xsession is lxde
+sed -i -e "s/^XSession=.*$/XSession=LXDE/gi" "$accountserv" 2>&1 | tee -a "$lognome"
+sleep 2
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#join user to relevant groups (except sudo) - check for nvram group and join if existent
+usermod -a -G lpadmin,lp,adm,games,mail,news,dialout,dip,fax,voice,cdrom,floppy,tape,audio,video,plugdev,scanner,bluetooth,colord,netdev,disk,backup,irc,tty,man,list "$userzz4" 2>&1 | tee -a "$lognome"
+sleep 1
+greptest3="$(grep -i "nvram" /etc/group)"; if [[ -n "$greptest3" ]]; then usermod -a -G nvram "$userzz4"; fi 2>&1 | tee -a "$lognome" 
+sleep 1
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#make sure firewall is enabled
+ufw enable 2>&1 | tee -a "$lognome"
+sleep 3
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#apply all relevant gsetting settings
+su - "$userzz4" -c "gsettings set org.gnome.Vino authentication-methods \"['vnc']\"" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.Vino notify-on-connect 'true'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.Vino require-encryption 'true'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.desktop.screensaver lock-enabled 'false'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.desktop.interface clock-format '12h'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.desktop.privacy remember-app-usage 'false'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.desktop.privacy remember-recent-files 'false'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.desktop.privacy recent-files-max-age '0'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.nautilus.preferences click-policy 'single'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.nautilus.preferences always-use-location-entry 'true'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.system.location enabled 'false'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.Miner.Files enable-monitors 'false'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.Miner.Files index-on-battery 'false'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.Miner.Files index-on-battery-first-time 'false'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.Miner.Files index-recursive-directories '[]'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.Miner.Files index-single-directories '[]'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.Miner.Files low-disk-space-limit '100'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.FTS max-word-length '0'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.FTS max-words-to-index '0'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.freedesktop.Tracker.Miner.Files sched-idle 'always'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.clocks geolocation 'false'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.desktop.session idle-delay '720'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'" 2>&1 | tee -a "$lognome"
+su - "$userzz4" -c "gsettings set org.gnome.shell favorite-apps \"['firefox-esr.desktop', 'evolution.desktop', 'empathy.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'Logout-Gnome.desktop']\"" 2>&1 | tee -a "$lognome"
+sleep 1
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#check for screen calibration file, and copy it into the right place if it exists
+if [[ -e /usr/local/.extra-copies/calibration/99-calibration.conf ]]; then mkdir -p /etc/X11/xorg.conf.d 2>&1 | tee -a "$lognome" && cp --no-preserve=all /usr/local/.extra-copies/calibration/99-calibration.conf /etc/X11/xorg.conf.d/ 2>&1 | tee -a "$lognome"; fi
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#guarantee that all folders and files in /usr/local/.extra-copies have contents readable and accessible to anyone
+find /usr/local/.extra-copies -type d -exec chmod 2755 {} \; 2>&1 | tee -a "$lognome"
+sleep 1
+find /usr/local/.extra-copies -type f -exec chmod 0644 {} \; 2>&1 | tee -a "$lognome"
+sleep 1
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#xscreensaver recommended settings (local and system wide) 
+sed --follow-symlinks -i -e "s/^\*mode:.*$/\*mode:\ \ blank/gi" /etc/X11/app-defaults/XScreenSaver && sed --follow-symlinks -i -e "s/^\*captureStderr:.*$/\*captureStderr:\ \ False/gi" /etc/X11/app-defaults/XScreenSaver && sed --follow-symlinks -i -e "s/^\*overlayStderr:.*$/\*overlayStderr:\ \ False/gi" /etc/X11/app-defaults/XScreenSaver && sed --follow-symlinks -i -e "s/^\*dpmsEnabled:.*$/\*dpmsEnabled:\ \ True/gi" /etc/X11/app-defaults/XScreenSaver && sed --follow-symlinks -i -e "s/^\*dpmsQuickoffEnabled:.*$/\*dpmsQuickoffEnabled:\ \ True/gi" /etc/X11/app-defaults/XScreenSaver 2>&1 | tee -a "$lognome"
+if [[ -e "$homeechoxscreen1" ]]; then
+  sed -i -e "s/^mode:.*$/mode:\ \ blank/gi" "$homeechoxscreen1" && sed -i -e "s/^captureStderr:.*$/captureStderr:\ \ False/gi" "$homeechoxscreen1" && sed -i -e "s/^overlayStderr:.*$/overlayStderr:\ \ False/gi" "$homeechoxscreen1" && sed -i -e "s/^dpmsEnabled:.*$/dpmsEnabled:\ \ True/gi" "$homeechoxscreen1" && sed -i -e "s/^dpmsQuickOff:.*$/dpmsQuickOff:\ \ True/gi" "$homeechoxscreen1" 2>&1 | tee -a "$lognome"
+fi
+sleep 3
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#check for software package errors and fix them
+DEBIAN_FRONTEND=noninteractive dpkg --force-confdef --force-confold --configure -a 2>&1 | tee -a "$lognome"
+sleep 1
+DEBIAN_FRONTEND=noninteractive apt-get -y -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" install -f 2>&1 | tee -a "$lognome"
+sleep 1
+DEBIAN_FRONTEND=noninteractive dpkg --force-confdef --force-confold --configure -a 2>&1 | tee -a "$lognome"
+sleep 1
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#update and dist-upgrade (update software packages)
+DEBIAN_FRONTEND=noninteractive apt-get -y update 2>&1 | tee -a "$lognome"
+sleep 2
+DEBIAN_FRONTEND=noninteractive apt-get -y -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" dist-upgrade 2>&1 | tee -a "$lognome"
+sleep 3
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#check for flash plug in for firefox, and if installed, update it to a newer version (if available). If flash is not installed do nothing.
+checkflash1="$(dpkg -s flashplugin-nonfree | grep -i "not installed")"
+checkflash2="$(which update-flashplugin-nonfree)"
+if [[ -z "$checkflash1" ]] || [[ -n "$checkflash2" ]]; then
+DEBIAN_FRONTEND=noninteractive update-flashplugin-nonfree --install --verbose 2>&1 | tee -a "$lognome"
+fi
+sleep 2
+
+echo "Partial stage completed. Please wait for further work to complete." 2>&1 | tee -a "$lognome"
+sleep 1
+
+#check for flash plug in for chromium, and if installed, update it to a newer version (if available). If flash is not installed do nothing.
+checkflash3="$(dpkg -s pepperflashplugin-nonfree | grep -i "not installed")"
+checkflash4="$(which update-pepperflashplugin-nonfree)"
+if [[ -z "$checkflash3" ]] || [[ -n "$checkflash4" ]]; then
+DEBIAN_FRONTEND=noninteractive update-pepperflashplugin-nonfree --install --verbose 2>&1 | tee -a "$lognome"
+fi
+sleep 2
+
+#end of fixtool
+echo "Fixtool has finished all work. Your computer will soon be SHUTDOWN. Finished at $(date) " 2>&1 | tee -a "$lognome"
+sleep 3
+
+#exit and shutdown system 
+systemctl poweroff
+exit 0

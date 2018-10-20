@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## shredzz version 1.0.0
+## This file is part of the shredzz program. This program will attempt
+## to securely delete files and folders using the program secure-delete.
+
+#zenity message - IMPORTANT: if change title of zenity, must update the command to kill it on other script(s)
+sleep 10800 | zenity --progress --no-cancel --auto-close --pulsate --width=300 --height=200 --title="Deletion Beyond Recovery Started" --text="\nDeletion\/shredding beyond recovery for the file\/folder you selected has started. \n\nPlease note that this process can take several minutes, or even a few hours if the folder to be deleted is very big. \n\nThis window will close automatically when the deletion is completed. \n\nThis deletion\/shredding started on $(date) \n"
+exit 0

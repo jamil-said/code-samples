@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016 AdoraDeal LLC (www.adoradeal.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+## powerzz version 1.0.1
+## This file is part of the powerzz program. This program will attempt
+## to monitor battery levels and hibernate/shutdown the computer when the battery
+## is close to be drained. This program relies on the program reaperzz to double-check
+## that certain temporary files are deleted at boot.
+
+#this is a GLOBAL switch NOT reacheable via GUI, which is NEVER supposed to be used under normal circunstances. It disables powerzz for all users regardless of preferences.  
+#exit 0 #powerzz-global-switch
+
+#sleep a little to let things load when booting
+sleep 10
+
+#run first instance
+nohup /usr/local/bin/powerzz4 > /dev/null 2>&1 &
+sleep 19
+
+#run second instance
+nohup /usr/local/bin/powerzz4 > /dev/null 2>&1 &
+sleep 19
+
+#run third instance
+nohup /usr/local/bin/powerzz4 > /dev/null 2>&1 &
+sleep 3
+
+exit 0
