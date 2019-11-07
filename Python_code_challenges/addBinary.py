@@ -14,7 +14,7 @@ class Solution:
         :type b: str
         :rtype: str
         """
-        return str(bin(int(a,2) + int(b,2)))[2:]
+        return bin(int(a,2) + int(b,2))[2:]
 
 
 print(Solution().addBinary("11", "1")) #100
@@ -42,14 +42,12 @@ class Solution:
                 result[-i] = '1'
                 carry = 1
             elif temp == 2:
-                result[-i] = '0'
                 carry = 1
             elif temp == 1:
                 result[-i] = '1'
                 carry = 0
             else:
-                result[-i] = '0'
                 carry = 0
         return ''.join(result) if result[0] != '0' else ''.join(result)[1:]
+
 '''
-            
