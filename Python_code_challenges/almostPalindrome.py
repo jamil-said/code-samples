@@ -8,10 +8,12 @@ score.
 """
 
 def apalin(word):
-    palindex = 0
-    for i in range(len(word)): 
-        if word[i] != word[len(word)-i-1]: palindex += 1
-    return palindex
+    palIndex = 0
+    for i in range(len(word)):
+        if word[i] != word[-(i+1)]:
+            palIndex += 1
+    return palIndex
+
 
 print(apalin('abba')) #0
 print(apalin('abcdcaa')) #2
