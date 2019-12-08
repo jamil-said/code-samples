@@ -1,4 +1,3 @@
-
 """   addTwoNumbers
 You are given two non-empty linked lists representing two non-negative 
 integers. The digits are stored in reverse order and each of their nodes 
@@ -20,13 +19,36 @@ Explanation: 342 + 465 = 807.
 #         self.val = x
 #         self.next = None
 
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        n1, n2, i = 0, 0, 1
+        while l1:
+            n1 += (l1.val * i)
+            i *= 10
+            l1 = l1.next
+        i = 1
+        while l2:
+            n2 += (l2.val * i)
+            i *= 10
+            l2 = l2.next
+        n3 = n1 + n2
+        l3 = res = ListNode(0)
+        while True:
+            tmp = n3 % 10
+            l3.val = tmp
+            n3 = n3 // 10
+            if n3 == 0:
+                break
+            l3.next = ListNode(0)
+            l3 = l3.next
+        return res
+
+
+""" alternative, slower
+
 class Solution:
     def addTwoNumbers(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
         l1Num, l2Num = self.calcNums(l1), self.calcNums(l2)
         return self.buildLL(str(l1Num + l2Num))
         
@@ -46,3 +68,4 @@ class Solution:
         prev.next = None
         return newHead
 
+"""
