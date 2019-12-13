@@ -1,4 +1,3 @@
-
 """ addTwoHugeNumbers -- 30min
 You're given 2 huge integers represented by linked lists. Each linked 
 list element is a number from 0 to 9999 that represents a number with 
@@ -51,6 +50,32 @@ class ListNode(object):
         self.next = None
 
 def addTwoHugeNumbers(a, b):
+    n1, n2 = a.value, b.value
+    a, b = a.next, b.next
+    c = ListNode(0)
+    while a:
+        n1 *= 10000
+        n1 += a.value
+        a = a.next
+    while b:
+        n2 *= 10000
+        n2 += b.value
+        b = b.next
+    n3 = n1 + n2
+    while True:
+        c.value = n3 % 10000
+        n3 //= 10000
+        if n3 == 0:
+            break
+        d = ListNode(0)
+        d.next = c
+        c = d
+    return c
+
+
+""" alternative, probably slower, more complicated
+
+def addTwoHugeNumbers(a, b):
     numA, numB = a.value, b.value
     currentA, currentB = a.next, b.next
     llResult = ListNode(0)
@@ -72,5 +97,5 @@ def addTwoHugeNumbers(a, b):
             currNodeResul.next = ListNode(0)
             currNodeResul = currNodeResul.next                     
     return llResult
-    
 
+"""
