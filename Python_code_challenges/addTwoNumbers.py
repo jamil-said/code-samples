@@ -22,6 +22,26 @@ Explanation: 342 + 465 = 807.
 
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        l3 = res = ListNode(0)
+        carry = 0
+        while True:
+            v3 = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
+            carry = 0 if (v3 < 10) else 1
+            l3.val = v3 % 10
+            l1 = l1.next if l1 else 0
+            l2 = l2.next if l2 else 0
+            if l1 or l2 or carry:
+                l3.next = ListNode(0)
+                l3 = l3.next
+            else:
+                break
+        return res
+
+
+""" Alternative, equal in speed and memory usage, but more complicated
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         n1, n2, i = 0, 0, 1
         while l1:
             n1 += (l1.val * i)
@@ -44,6 +64,7 @@ class Solution:
             l3 = l3.next
         return res
 
+"""
 
 """ alternative, slower
 
@@ -69,3 +90,4 @@ class Solution:
         return newHead
 
 """
+     
