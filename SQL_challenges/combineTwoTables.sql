@@ -30,13 +30,10 @@ for each of those people:
 FirstName, LastName, City, State
 */
 
--- "group by" & "order by" are not required, but make for a nicer output
-SELECT pe.FirstName, pe.LastName, ad.City, ad.State
-FROM Person pe
-LEFT JOIN Address ad
-ON pe.PersonId = ad.PersonId
-GROUP BY FirstName, LastName
-ORDER BY FirstName ASC, LastName ASC;
+
+SELECT FirstName, LastName, City, State
+FROM Person
+LEFT JOIN Address ON Address.PersonId = Person.PersonId;
 
 
 /*
@@ -47,4 +44,3 @@ input:  {"headers": {"Person": ["PersonId", "LastName", "FirstName"]
 output: {"headers":["FirstName","LastName","City","State"],"values":[["
 Allen","Wang",null,null]]}
 */
-

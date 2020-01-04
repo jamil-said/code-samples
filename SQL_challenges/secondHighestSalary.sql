@@ -24,10 +24,13 @@ the query should return null.
 
 */
 
--- put in subquery to generate NULL instead of empty, use "distinct"
--- because problem wants a "distinct" second highest (can't be equal to highest)
-SELECT (SELECT DISTINCT Salary from Employee
-ORDER BY Salary DESC LIMIT 1 OFFSET 1) AS SecondHighestSalary;
+
+SELECT (SELECT DISTINCT Salary 
+        FROM Employee 
+        ORDER BY Salary DESC 
+        LIMIT 1 
+        OFFSET 1) 
+        AS SecondHighestSalary;
 
 
 /*
