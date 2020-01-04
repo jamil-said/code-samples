@@ -14,4 +14,4 @@ Well tested Bash scripts that control/manage computer and system parts on a Linu
 * **Sound Troubleshooting (alsazz)**: this program will attempt to unmute and set volumes on different channels on your computer. This program is useful to troubleshoot/fix computers with sound problems.
 
 ### Bash Scripts Author
-Jamil Said Jr -- Copyright (C) 2014-2018 Jamil Said Jr
+Jamil Said Jr -- Copyright (C) Jamil Said Jr

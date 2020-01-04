@@ -46,7 +46,7 @@ After the game starts, you will be given the chance to read the game's rules (ma
 * The last player that remains with subs in the battlefield is the winner!
 
 ### Python Code Author
-Jamil Said Jr -- Copyright (C) 2018 Jamil Said Jr
+Jamil Said Jr -- Copyright (C) Jamil Said Jr
 
 ### Game Development Environment
 Developed on a Debian 9, Python 3.5.3, GNU Bash 4.4.12 environment

@@ -31,4 +31,4 @@ The data is provided in a txt flat file (UTF-8 encoded), which is delimited by t
 The module **flights_etl.py** starts the process and will extract, check, fix (when possible), transform and load data from the txt file into the MySQL database (the database part is done by imported module **flights_db**). The script will save a log with missing entries on **missing_data.tx**, and a log with obviously erroneous entries (not fixed by the script) on **bad_data.txt**, both logs created on the same directory where the script is run from. The logs can be used later to refine the script. The scripts are well commented and explain every step.
 
 ### Python Scripts Author
-Jamil Said Jr. -- Copyright (C) 2018 Jamil Said Jr
+Jamil Said Jr. -- Copyright (C) Jamil Said Jr
