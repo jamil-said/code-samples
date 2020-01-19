@@ -1,4 +1,3 @@
-
 """minimumASCIIDeleteSum
 Given two strings s1, s2, find the lowest ASCII sum of deleted characters 
 to make two strings equal.
@@ -30,22 +29,22 @@ Note:
 All elements of each string will have an ASCII value in [97, 122].
 """
 
+
 class Solution:
     def minimumDeleteSum(self, s1, s2):
-        """
-        :type s1: str
-        :type s2: str
-        :rtype: int
-        """
-        if len(s1) < len(s2): s1, s2 = s2, s1
+        if len(s1) < len(s2): 
+            s1, s2 = s2, s1
         dp = [0] * (len(s2)+1)
         for i in range(1, len(s1)+1):
             tmp = [0]
             for j in range(1, len(s2)+1):
-                if s1[i-1] == s2[j-1]: tmp.append(dp[j-1] + ord(s1[i-1]))
-                else: tmp.append(max(tmp[-1], dp[j]))
+                if s1[i-1] == s2[j-1]: 
+                    tmp.append(dp[j-1] + ord(s1[i-1]))
+                else: 
+                    tmp.append(max(tmp[-1], dp[j]))
             dp = tmp[:]
         return sum(map(ord, s1+s2)) - 2 * dp[-1]
+
 
 """ alternative, slower
 class Solution:
@@ -64,3 +63,16 @@ class Solution:
         return dp[len(s1)%2][-1]
 """
 
+
+print(Solution().minimumDeleteSum("sea", "eat")) #231
+print(Solution().minimumDeleteSum('', 'cat')) #312
+print(Solution().minimumDeleteSum('cat', '')) #312
+print(Solution().minimumDeleteSum('cat', 'cat')) #0
+print(Solution().minimumDeleteSum('at', 'cat')) #99
+print(Solution().minimumDeleteSum('boat', 'got')) #298
+print(Solution().minimumDeleteSum('got', 'boat')) #298
+print(Solution().minimumDeleteSum('thought', 'sloughs')) #674
+print(Solution().minimumDeleteSum('cat', 'bat')) #197
+print(Solution().minimumDeleteSum('sea', 'eat')) #231
+print(Solution().minimumDeleteSum('row', 'cat')) #656
+print(Solution().minimumDeleteSum("delete", "leet")) #403
