@@ -1,12 +1,11 @@
-
 """ diagonalTraverseFromTop
 Given an MxN matrix, write code which prints out the diagonals (from upper left
 to lower right) of the matrix. In this example where M = 3, N = 4:
 
 [[9 3 2]
-[8 6 1]
-[5 5 6]
-[1 2 8]]
+ [8 6 1]
+ [5 5 6]
+ [1 2 8]]
 
 Your code should print out:
 9
@@ -17,21 +16,21 @@ Your code should print out:
 8
 """
 
-def printMtx(mtx):
-    if not mtx or not mtx[0]: return ''
-    for i in range(len(mtx[0])):
-        printDia(mtx, 0, i)
-    for i in range(1, len(mtx)):
-        printDia(mtx, i, len(mtx[0])-1)
-        
-def printDia(mtx, dx, dy):
-    tmpStr = str(mtx[dx][dy]) + ' '
-    while dx < len(mtx)-1 and dy > 0:
-        dx += 1
-        dy -= 1
-        tmpStr += str(mtx[dx][dy]) + ' '
-    print(tmpStr)
+
+def printMtx(arr):
+    for idX in range(len(arr[0])):
+        printDia(arr, idX, 0, '')
+    for idY in range(1, len(arr)):
+        printDia(arr, len(arr[0])-1, idY, '')
     
+def printDia(arr, idX, idY, res):
+    while idY < len(arr) and idX >= 0:
+        res += (str(arr[idY][idX]) + ' ')
+        idY += 1
+        idX -= 1
+    print(res[:-1])        
+
+
 printMtx([[9,3,2], [8,6,1], [5,5,6], [1,2,8]])
 """
 9
