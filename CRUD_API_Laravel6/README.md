@@ -18,19 +18,23 @@ Please see all details on the file **database.sql**
     
 ### Using the API (with curl command):
 **Get all users**
+
 ```curl --location --request GET 'http://localhost:8000/api/users'```    
 
 **Add a new user**
+
 ```curl --location --request POST 'http://localhost:8000/api/users/create' --form 'first_name=Johnny' --form 'last_name=Doe' --form 'email=jodoewonder4411@google.com'```    
 
 ```curl --location --request POST 'http://localhost:8000/api/users/create' --form 'first_name=Jeff' --form 'last_name=Smith' --form 'email=jeffyrs8123@google.com'```    
 
 **Update User**
+
 ```curl --location --request POST 'http://localhost:8000/api/users/update/3' --form 'first_name=Riley'```
 
 ```curl --location --request POST 'http://localhost:8000/api/users/update/2' --form 'last_name=Moe'```
 
 **Delete User**
+
 ```curl --location --request DELETE 'http://localhost:8000/api/users/delete/1'```
 
 ```curl --location --request DELETE 'http://localhost:8000/api/users/delete/2'```
