@@ -10,7 +10,7 @@
 * This API was created and tested on a Linux Debian 10 machine
 * Main software packages used/installed for this API:
     MySQL (8.0.2), Python (3.7.3 -- including: python3.7-venv), Flask 1.1.2, PyMySQL 0.9.3
-* To run (locally): on a terminal emulator, change working directory to the API folder (ex: cd ~/CRUD_API_Python3_Flask_MySQL) and start the virtual environment and the application by running:  **source venv/bin/activate && python3 main.py**, 
+* To run (locally): on a terminal emulator, change working directory to the API folder (ex: cd ~/CRUD_API_Python3_Flask_MySQL) and start the virtual environment and the application by running:  **source venv/bin/activate && python3 main.py** 
 * After the step above, open a browser on http://127.0.0.1:5000, and you should see the message: **API is ready!**
 * To quit, press CTRL+C and then run command **deactivate** on the terminal
 
