@@ -23,7 +23,7 @@ def mazeFind(maze):
     if not maze or not maze[0]: 
         return -1
     result = []
-    calc([], maze, [], 0, 0, result)
+    calc([], maze, set(), 0, 0, result)
     return result[0] if result else -1
 
 def calc(path, maze, vis, i, j, result):
@@ -39,10 +39,12 @@ def calc(path, maze, vis, i, j, result):
         else:
             result.append(len(path))
     else:
-        calc(path+[(i,j)], maze, vis+[(i,j)], i+1, j, result)
-        calc(path+[(i,j)], maze, vis+[(i,j)], i, j+1, result)
-        calc(path+[(i,j)], maze, vis+[(i,j)], i-1, j, result)
-        calc(path+[(i,j)], maze, vis+[(i,j)], i, j-1, result)
+        visCopy = vis.copy()
+        visCopy.update([(i,j)])
+        calc(path+[(i,j)], maze, visCopy, i+1, j, result)
+        calc(path+[(i,j)], maze, visCopy, i, j+1, result)
+        calc(path+[(i,j)], maze, visCopy, i-1, j, result)
+        calc(path+[(i,j)], maze, visCopy, i, j-1, result)
             
 
 print(mazeFind([[1, 0, 0], [1, 0, 0], [1, 5, 1]])) #3
