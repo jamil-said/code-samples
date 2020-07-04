@@ -41,10 +41,10 @@ def calc(path, maze, vis, i, j, result):
     else:
         visCopy = vis.copy()
         visCopy.update([(i,j)])
-        calc(path+[(i,j)], maze, visCopy, i+1, j, result)
-        calc(path+[(i,j)], maze, visCopy, i, j+1, result)
-        calc(path+[(i,j)], maze, visCopy, i-1, j, result)
-        calc(path+[(i,j)], maze, visCopy, i, j-1, result)
+        calc(path+[1], maze, visCopy, i+1, j, result)
+        calc(path+[1], maze, visCopy, i, j+1, result)
+        calc(path+[1], maze, visCopy, i-1, j, result)
+        calc(path+[1], maze, visCopy, i, j-1, result)
             
 
 print(mazeFind([[1, 0, 0], [1, 0, 0], [1, 5, 1]])) #3
