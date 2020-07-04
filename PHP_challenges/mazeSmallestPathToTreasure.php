@@ -45,13 +45,12 @@ function calc($path, $maze, $vis, $i, $j, &$result) {
             $result[] = count($path);
     }
     else {
-        $visCopy = $vis;
-        $visCopy["$i,$j"] = 1;
+        $vis["$i,$j"] = 1;
         $path[]=1;
-        calc($path, $maze, $visCopy, $i+1, $j, $result);
-        calc($path, $maze, $visCopy, $i, $j+1, $result);
-        calc($path, $maze, $visCopy, $i-1, $j, $result);
-        calc($path, $maze, $visCopy, $i, $j-1, $result);
+        calc($path, $maze, $vis, $i+1, $j, $result);
+        calc($path, $maze, $vis, $i, $j+1, $result);
+        calc($path, $maze, $vis, $i-1, $j, $result);
+        calc($path, $maze, $vis, $i, $j-1, $result);
     }
 }
     
