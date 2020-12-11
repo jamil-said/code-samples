@@ -6,7 +6,7 @@ This program allows users to create, read, update and delete a list of "company 
 ### This program allows five basic actions:
 * **Bulk Create/Overwrite an Employee List:** must provide a non-empty dictionary with employee id as the key and the employee full name as the value. If an employee list exists, it will be overwritten by the new one
 * **Retrieve the Existing Employee List:** this operation will display all employees on the employee list. If the employee list doesn't exist, this operation will fail
-* **Create or Update Employees on an Existing Employee List:** must provide a non-empty dictionary with employee id as the key and the employee full name as the value. If the employee list exists, it will be updated, if the employee list doesn't exist, it will be created
+* **Create or Update Employees on the Employee List:** must provide a non-empty dictionary with employee id as the key and the employee full name as the value. If the employee list exists, it will be updated, if the employee list doesn't exist, it will be created
 * **Delete a User:** must provide an employee id for the user to be deleted
 * **Generate Random Group of Employees:** all employees on the employee list will be combined randomly in groups (min: 3, max: 5 employees per group), and the list of groups will be displayed
 
