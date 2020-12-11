@@ -28,7 +28,7 @@ On a terminal emulator, change the working directory to the folder where the pro
 
 ```EmployeeList().employee_list_retrieve()```
 
-**Create or Update Employees on an Existing Employee List**
+**Create or Update Employees on the Employee List**
 
 ```EmployeeList().add_update_employee({'1045':'Adriana P. Soza', '1047':'Jose N. Rodriguez'})```
 
