@@ -32,7 +32,7 @@ On a terminal emulator, change the working directory to the folder where the pro
 
 ```EmployeeList().add_update_employee({'1045':'Adriana P. Soza', '1047':'Jose N. Rodriguez'})```
 
-**Delete User**
+**Delete Employee from the Employee List**
 
 ```EmployeeList().delete_employee(1047)```
 
