@@ -60,16 +60,14 @@ Input/Output
 
 def matrixElementsSum(matrix):
     res = 0
-    control = 0
     len_hor = len(matrix[0])-1
     while len_hor >= 0:
         for i in range(len(matrix)):
             if matrix[i][len_hor] == 0:
-                control = 1
-            elif matrix[i][len_hor] != 0 and not control:
+                break
+            else:
                 res += matrix[i][len_hor]
         len_hor -= 1
-        control = 0
     return res
 
     
