@@ -55,7 +55,7 @@ The dates in the example are given in the format YYYY-MM-DD
 
 CREATE PROCEDURE mischievousNephews()
 BEGIN
-	SELECT WEEKDAY(mischief_date) weekday, mischief_date, author, title
+    SELECT WEEKDAY(mischief_date) weekday, mischief_date, author, title
     FROM mischief
     ORDER BY weekday, FIELD(author, 'Huey', 'Dewey', 'Louie'), mischief_date, title;
 END

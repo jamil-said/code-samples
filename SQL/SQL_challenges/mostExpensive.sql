@@ -50,7 +50,7 @@ While the total cost for each product was 40, Cucumber has the lexicographically
 
 CREATE PROCEDURE mostExpensive()
 BEGIN
-	SELECT name
+    SELECT name
     FROM Products
     ORDER BY (price * quantity) DESC, name
     LIMIT 1;

@@ -52,7 +52,7 @@ Mikel 	Kravitz 	PBX86iw1Ied87Z9OarE6sdSLdt%Mikel_Kravitz%W73XOY9YaOgi060r2x12D2E
 
 CREATE PROCEDURE securityBreach()
 BEGIN
-	SELECT first_name, second_name, attribute
+    SELECT first_name, second_name, attribute
     FROM users
     WHERE attribute LIKE BINARY CONCAT('%', first_name, '\_', second_name, '%')
     AND attribute NOT LIKE '\%%'

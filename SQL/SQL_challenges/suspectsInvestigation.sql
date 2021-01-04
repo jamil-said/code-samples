@@ -53,7 +53,7 @@ included in the results.
 
 CREATE PROCEDURE suspectsInvestigation()
 BEGIN
-	SELECT id, name, surname
+    SELECT id, name, surname
     FROM Suspect
     WHERE name like 'b%'
     AND surname like 'Gre_n'

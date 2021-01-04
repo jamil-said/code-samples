@@ -49,7 +49,7 @@ urandom
 
 CREATE PROCEDURE contestLeaderboard()
 BEGIN
-	SELECT name
+    SELECT name
     FROM leaderboard
     ORDER BY score DESC
     LIMIT 5 

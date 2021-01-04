@@ -53,7 +53,7 @@ the second one, because Option1 = 25% of 100 + 25% of 10 +50% of 50 = 52.5, Opti
 
 CREATE PROCEDURE gradeDistribution()
 BEGIN
-	SELECT name, id
+    SELECT name, id
     FROM Grades
     WHERE (Final > 0.25*Midterm1 + 0.25*Midterm2 + 0.5*Final) AND (Final > 0.5*Midterm1 + 0.5*Midterm2)
     ORDER BY SUBSTR(name, 1, 3), id;
