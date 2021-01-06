@@ -52,7 +52,7 @@ Tonie Moreton
 
 CREATE PROCEDURE newsSubscribers()
 BEGIN
-	SELECT subscriber
+    SELECT subscriber
     FROM full_year 
     WHERE newspaper LIKE '%daily%'
     UNION

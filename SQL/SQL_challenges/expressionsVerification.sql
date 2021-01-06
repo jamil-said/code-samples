@@ -52,7 +52,7 @@ Explanation:
 
 CREATE PROCEDURE expressionsVerification()
 BEGIN
-	SELECT id, a, b, operation, c 
+    SELECT id, a, b, operation, c 
     FROM expressions
     WHERE c = (SELECT CASE
         WHEN operation = '+'
