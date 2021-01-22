@@ -44,12 +44,14 @@ def minesweeper(m):
     r = [[0 for i in range(len(m[0]))] for j in range(len(m))]
     for i in range(len(m)):
         for j in range(len(m[0])):
-            r[i][j] += 1 if i-1>=0 and m[i-1][j] else 0
-            r[i][j] += 1 if i-1>=0 and j-1>=0 and m[i-1][j-1] else 0
-            r[i][j] += 1 if i-1>=0 and j+1<len(m[0]) and m[i-1][j+1] else 0
-            r[i][j] += 1 if i+1<len(m) and m[i+1][j] else 0
-            r[i][j] += 1 if i+1<len(m) and j-1>=0 and m[i+1][j-1] else 0
-            r[i][j] += 1 if i+1<len(m) and j+1<len(m[0]) and m[i+1][j+1] else 0
+            if i-1 >= 0:
+                r[i][j] += 1 if m[i-1][j] else 0
+                r[i][j] += 1 if j-1>=0 and m[i-1][j-1] else 0
+                r[i][j] += 1 if j+1<len(m[0]) and m[i-1][j+1] else 0
+            if i+1 < len(m):
+                r[i][j] += 1 if m[i+1][j] else 0
+                r[i][j] += 1 if j-1>=0 and m[i+1][j-1] else 0
+                r[i][j] += 1 if j+1<len(m[0]) and m[i+1][j+1] else 0
             r[i][j] += 1 if j-1>=0 and m[i][j-1] else 0
             r[i][j] += 1 if j+1<len(m[0]) and m[i][j+1] else 0
     return r
